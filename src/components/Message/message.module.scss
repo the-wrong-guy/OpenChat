@@ -1,0 +1,124 @@
+@mixin container {
+  position: relative;
+  width: 350px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+@mixin displayPic {
+  position: relative;
+  img {
+    height: 45px;
+    width: 45px;
+    border-radius: 50% !important;
+    // border: 1px solid #fa2af0;
+  }
+}
+
+@mixin infoDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+@mixin displayName {
+  font-size: 17px;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+@mixin text {
+  position: relative;
+  max-width: 100%;
+  text-justify: inter-word;
+  word-break: break-all;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  /* Non standard for WebKit */
+  -webkit-hyphens: manual;
+  -moz-hyphens: manual;
+  -ms-hyphens: manual;
+  hyphens: manual;
+  background-color: #9c9c9c;
+  padding: 3px 10px;
+  border-radius: 1000px;
+  color: #ffffff;
+}
+@mixin textDiv {
+  position: relative;
+  width: 310px;
+}
+
+.SendContainer {
+  @include container();
+  justify-content: flex-end;
+}
+
+.RecieveContainer {
+  @include container();
+  justify-content: flex-start;
+}
+
+.displayPic {
+  @include displayPic();
+  margin-left: 3px;
+}
+
+.displayPicSend {
+  @include displayPic();
+  margin-right: 3px;
+}
+
+.infoDiv {
+  margin-left: 10px;
+  display: grid;
+  gap: 10px;
+}
+
+.infoDivSend {
+  @include infoDiv();
+  margin-right: 10px;
+  align-items: flex-end;
+}
+
+.displayName {
+  font-size: 17px;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.displayNameSend {
+  @include displayName();
+}
+
+.time {
+  font-weight: 200;
+  color: #505050;
+}
+
+.textDiv {
+  @include textDiv();
+  text-align: left;
+}
+
+.textDivSend {
+  @include textDiv();
+  text-align: right;
+}
+
+.text {
+  @include text();
+}
+
+.textSend {
+  @include text();
+}
+
+@media only screen and (max-width: 600px) {
+  .textDiv {
+    width: 100% !important;
+  }
+}

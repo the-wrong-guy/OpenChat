@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+/* eslint-disable react/jsx-indent */
+/* eslint-disable react/jsx-filename-extension */
+import React, { useEffect } from "react";
+import {
+  Route,
+  BrowserRouter as Router,
+  Switch,
+  useHistory,
+} from "react-router-dom";
+import Routes from "./route";
+import LoginPage from "./components/Login Page/login";
+import MainPage from "./components/Main Page/main";
+import { auth } from "./firebase";
 
 function App() {
+  const history = useHistory();
+
+  // eslint-disable-next-line react/jsx-filename-extension
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/login">
+          <LoginPage />
+        </Route>
+        <Route exact path="/">
+          <MainPage />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 

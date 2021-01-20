@@ -1,0 +1,13 @@
+.outerMostConSend {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.outerMostConRecieve {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}

@@ -1,0 +1,12 @@
+{
+    "extends": ["airbnb","prettier"],
+    "plugins": ["prettier"],
+    "rules": {
+        "no-unused-vars" : "warn",
+        "no-console" : "off",
+        "react/self-closing-comp" : "off",
+        "react/react-in-jsx-scope" : "off",
+        "react/jsx-closing-tag-location" : "off"
+        
+    }
+}
