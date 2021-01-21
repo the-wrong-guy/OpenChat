@@ -13,11 +13,10 @@ import Loader from "../Loader/loader";
 
 export default function Main() {
   const [senderMsg, setSenderMsg] = useState("");
+  // const [query, SetQuery] = useState(null);
   const messagesRef = db.collection("messages");
   const query = messagesRef.orderBy("createdAt").limit(100);
-  // const [messages, setMessages] = useState([]);
   const [messages] = useCollectionData(query, { idField: "id" });
-
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(() => auth.currentUser);
   const [userDetails, setUserDetails] = useState({
@@ -28,11 +27,10 @@ export default function Main() {
   const emptyDiv = useRef();
 
   useEffect(() => {
-    setTimeout(() => {
-      console.log("SetTimeOut Called");
+    if (emptyDiv.current) {
       emptyDiv.current.scrollIntoView({ behavior: "smooth" });
-    }, 5000);
-  }, []);
+    }
+  }, [query]);
 
   useEffect(() => {
     // eslint-disable-next-line no-shadow
