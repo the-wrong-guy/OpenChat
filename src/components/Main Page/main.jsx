@@ -28,6 +28,13 @@ export default function Main() {
   const emptyDiv = useRef();
 
   useEffect(() => {
+    setTimeout(() => {
+      console.log("SetTimeOut Called");
+      emptyDiv.current.scrollIntoView({ behavior: "smooth" });
+    }, 5000);
+  }, []);
+
+  useEffect(() => {
     // eslint-disable-next-line no-shadow
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
