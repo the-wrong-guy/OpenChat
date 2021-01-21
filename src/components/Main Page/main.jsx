@@ -15,7 +15,7 @@ export default function Main() {
   const [senderMsg, setSenderMsg] = useState("");
   // const [query, SetQuery] = useState(null);
   const messagesRef = db.collection("messages");
-  const query = messagesRef.orderBy("createdAt").limit(50);
+  const query = messagesRef.orderBy("createdAt").limit(25);
   const [messages] = useCollectionData(query, { idField: "id" });
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(() => auth.currentUser);
