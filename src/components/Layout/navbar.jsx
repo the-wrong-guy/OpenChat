@@ -42,6 +42,9 @@ export default function Navbar({ displayName, displayPic }) {
               <AccountCircle />
             )}
           </IconButton>
+          <Button onClick={signOut} variant="contained" size="small">
+            Sign Out
+          </Button>
         </div>
       </Toolbar>
     </AppBar>
