@@ -99,7 +99,7 @@ export default function Main() {
                 ></span>
               </main>
               <form className={styles.form} onSubmit={sendMessage}>
-                <Paper elevation={5} className={styles.inputCard}>
+                <Paper elevation={15} className={styles.inputCard}>
                   <input
                     name="message"
                     type="text"
@@ -117,6 +117,10 @@ export default function Main() {
                   size="small"
                 >
                   Send
+                  <img
+                    src="https://img.icons8.com/plasticine/30/000000/paper-plane.png"
+                    alt="button"
+                  />
                 </Button>
               </form>
             </div>

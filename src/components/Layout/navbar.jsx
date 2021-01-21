@@ -25,7 +25,6 @@ export default function Navbar({ displayName, displayPic }) {
           <span>Open Chat</span>
         </div>
         <div>
-          {displayName}
           <IconButton
             aria-label="account of current user"
             aria-controls="menu-appbar"
@@ -34,6 +33,7 @@ export default function Navbar({ displayName, displayPic }) {
           >
             {displayPic ? (
               <img
+                className={styles.displayPic}
                 style={{ height: "40px", borderRadius: "50%" }}
                 src={displayPic}
                 alt="display pic"
@@ -42,11 +42,12 @@ export default function Navbar({ displayName, displayPic }) {
               <AccountCircle />
             )}
           </IconButton>
-          <Button onClick={signOut} variant="contained" size="small">
-            Sign Out
-          </Button>
         </div>
       </Toolbar>
     </AppBar>
   );
 }
+
+// <Button onClick={signOut} variant="contained" size="small">
+// Sign Out
+// </Button>

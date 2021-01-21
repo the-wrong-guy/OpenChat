@@ -4,7 +4,7 @@
   height: 100%;
   display: flex;
   align-items: center;
-  margin: 20px 0;
+  margin: 14px 0;
 }
 
 @mixin displayPic {
@@ -33,11 +33,12 @@
 @mixin text {
   position: relative;
   max-width: 100%;
+  text-align: justify !important;
   text-justify: inter-word;
-  word-break: break-all;
+  // word-break: break-all;
   word-wrap: break-word;
-  overflow-wrap: break-word;
-  /* Non standard for WebKit */
+  // overflow-wrap: break-word;
+  // /* Non standard for WebKit */
   -webkit-hyphens: manual;
   -moz-hyphens: manual;
   -ms-hyphens: manual;
@@ -47,8 +48,8 @@
 }
 @mixin textDiv {
   position: relative;
-  min-width: 30px;
-  max-width: 310px;
+  min-width: 30px !important;
+  max-width: 310px !important;
   padding: 3px 10px;
   border-radius: 15px;
   background-color: #9c9c9c;
@@ -75,9 +76,9 @@
 }
 
 .infoDiv {
+  @include infoDiv();
   margin-left: 10px;
-  display: grid;
-  gap: 10px;
+  align-items: flex-start;
 }
 
 .infoDivSend {
@@ -103,12 +104,12 @@
 
 .textDiv {
   @include textDiv();
-  text-align: left;
+  // text-align: left;
 }
 
 .textDivSend {
   @include textDiv();
-  text-align: right;
+  // text-align: right;
 }
 
 .text {
@@ -121,6 +122,6 @@
 
 @media only screen and (max-width: 600px) {
   .textDiv {
-    width: 100% !important;
+    // width: 100% !important;
   }
 }

@@ -1,5 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Damion&display=swap");
+
 .appbar {
-  background: rgb(31, 81, 219) !important;
+  background: rgb(255, 179, 36) !important;
 }
 
 .Toolbar {
@@ -9,7 +11,7 @@
 }
 
 .logoDiv {
-  width: 200px;
+  // width: 300px;
   height: 50px;
   display: flex;
   align-items: center;
@@ -20,7 +22,25 @@
   }
 
   span {
+    font-family: "Damion", cursive;
     font-weight: 100;
-    font-size: 20px;
+    font-size: 30px;
+    letter-spacing: 2px;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .logoDiv {
+    .logo {
+      margin-left: 0px;
+      height: 40px;
+    }
+    span {
+      font-size: 20px;
+    }
+  }
+
+  .displayPic {
+    height: 32px;
   }
 }

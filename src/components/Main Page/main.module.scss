@@ -29,9 +29,12 @@
 .form {
   position: relative;
   width: 100%;
-  padding: 10px 0;
+  height: 100px;
+  padding: 0 10px;
   display: flex;
+  align-items: center;
   gap: 10px;
+  background: #eaf5ea;
   // height: 10vh;
   // position: absolute;
 
@@ -41,6 +44,7 @@
     height: 50px;
     border-radius: 1000px;
     outline: none;
+    // border: 1px solid gray;
     input {
       width: 100%;
       height: 100%;
@@ -55,14 +59,17 @@
     }
   }
   .Button {
+    // height: 40px !important;
     width: 100px;
+    background: rgb(255, 179, 36) !important;
+    font-weight: 600 !important;
   }
 }
 
 .main {
   position: relative;
   width: 100%;
-  height: 88%;
+  height: calc(100% - 100px);
   // margin: 10vh 0 10vh;
   overflow-y: scroll;
   display: flex;
@@ -80,14 +87,36 @@
 
 .main::-webkit-scrollbar-thumb {
   border-radius: 1000px;
-  background: #ee8309;
+  background: rgb(255, 179, 36);
 }
 
 @media only screen and (max-width: 600px) {
   .messageBox {
-    height: calc(100vh - 95px) !important;
+    height: calc(100vh - 64px) !important;
   }
   .innnerContainer {
     width: 100vw;
   }
+
+  .form {
+    height: 70px;
+    .inputCard {
+      height: 42px;
+    }
+    .Button {
+      width: 50px;
+      font-size: 12px !important;
+      img {
+        height: 20px;
+      }
+    }
+  }
+
+  .main {
+    height: calc(100% - 70px);
+  }
+
+  // .inputCard {
+  //   height: 40px;
+  // }
 }
