@@ -1,24 +1,22 @@
 /* eslint-disable react/jsx-indent */
 /* eslint-disable react/jsx-filename-extension */
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Route,
   BrowserRouter as Router,
   Switch,
-  useHistory,
+  useLocation,
 } from "react-router-dom";
-import Routes from "./route";
+import { AnimatePresence } from "framer-motion";
 import LoginPage from "./components/Login Page/login";
 import MainPage from "./components/Main Page/main";
-import { auth } from "./firebase";
 
 function App() {
-  const history = useHistory();
-
   // eslint-disable-next-line react/jsx-filename-extension
+  const location = useLocation();
   return (
-    <Router>
-      <Switch>
+    <AnimatePresence exitBeforeEnter>
+      <Switch location={location} key={location.pathname}>
         <Route exact path="/login">
           <LoginPage />
         </Route>
@@ -26,7 +24,7 @@ function App() {
           <MainPage />
         </Route>
       </Switch>
-    </Router>
+    </AnimatePresence>
   );
 }
 

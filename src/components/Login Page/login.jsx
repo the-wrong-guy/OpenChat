@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Paper, Typography, Button } from "@material-ui/core";
+import { Paper, Button } from "@material-ui/core";
+import { motion } from "framer-motion";
 import firebase from "firebase";
 import cx from "classnames";
 import { useHistory } from "react-router-dom";
@@ -51,7 +52,12 @@ export default function Login() {
     return unsubscribe;
   }, []);
   return (
-    <div className={styles.container}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className={styles.container}
+    >
       {loading ? (
         "loading..."
       ) : (
@@ -120,6 +126,6 @@ export default function Login() {
           </div>
         </>
       )}
-    </div>
+    </motion.div>
   );
 }

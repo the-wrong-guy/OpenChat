@@ -42,14 +42,16 @@
   -moz-hyphens: manual;
   -ms-hyphens: manual;
   hyphens: manual;
-  background-color: #9c9c9c;
-  padding: 3px 10px;
-  border-radius: 1000px;
+
   color: #ffffff;
 }
 @mixin textDiv {
   position: relative;
-  width: 310px;
+  min-width: 30px;
+  max-width: 310px;
+  padding: 3px 10px;
+  border-radius: 15px;
+  background-color: #9c9c9c;
 }
 
 .SendContainer {

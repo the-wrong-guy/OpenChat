@@ -3,6 +3,7 @@ import { Paper, Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import firebase from "firebase";
 import cx from "classnames";
+import { motion } from "framer-motion";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { auth, db } from "../../firebase";
 import Navbar from "../Layout/navbar";
@@ -69,7 +70,12 @@ export default function Main() {
     }
   };
   return (
-    <div className={styles.container}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className={styles.container}
+    >
       {loading ? (
         <div className={styles.loaderDiv}>
           <Loader />
@@ -84,6 +90,7 @@ export default function Main() {
             <div className={styles.innnerContainer}>
               <main className={styles.main}>
                 {messages &&
+                  user &&
                   messages.map((msg) => <Message key={msg.id} message={msg} />)}
 
                 <span
@@ -116,6 +123,6 @@ export default function Main() {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
