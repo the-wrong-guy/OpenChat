@@ -1,22 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { AppBar, Toolbar, IconButton, Button } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import styles from "./navbar.module.scss";
 import { auth } from "../../firebase";
 import logo from "./logo.png";
+import DrawerBox from "./drawer";
+import { drawerToggle, themeToggle } from "../../Redux/Action/action";
+
 // eslint-disable-next-line react/prop-types
 export default function Navbar({ displayName, displayPic }) {
-  const history = useHistory();
-  const signOut = () => {
-    try {
-      auth.signOut().then(() => {
-        history.push("/login");
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const dispatch = useDispatch();
+
   return (
     <AppBar className={styles.appbar} position="static">
       <Toolbar className={styles.Toolbar}>
@@ -30,6 +25,7 @@ export default function Navbar({ displayName, displayPic }) {
             aria-controls="menu-appbar"
             aria-haspopup="true"
             color="inherit"
+            onClick={() => dispatch(drawerToggle())}
           >
             {displayPic ? (
               <img
@@ -42,10 +38,8 @@ export default function Navbar({ displayName, displayPic }) {
               <AccountCircle />
             )}
           </IconButton>
-          <Button onClick={signOut} variant="contained" size="small">
-            Sign Out
-          </Button>
         </div>
+        <DrawerBox />
       </Toolbar>
     </AppBar>
   );

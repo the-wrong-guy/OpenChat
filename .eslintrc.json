@@ -7,6 +7,10 @@
         "react/self-closing-comp" : "off",
         "react/react-in-jsx-scope" : "off",
         "react/jsx-closing-tag-location" : "off"
-        
-    }
+    },
+    "parser": "babel-eslint",
+    "parserOptions": {
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
+  }
 }

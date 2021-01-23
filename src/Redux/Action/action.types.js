@@ -1,0 +1,6 @@
+const TYPES = {
+  THEME_TOGGLE: "THEME_TOGGLE",
+  DRAWER_TOGGLE: "DRAWER_TOGGLE",
+};
+
+export default TYPES;

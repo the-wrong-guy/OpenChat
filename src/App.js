@@ -3,7 +3,6 @@
 import React from "react";
 import {
   Route,
-  BrowserRouter as Router,
   Switch,
   useLocation,
 } from "react-router-dom";
