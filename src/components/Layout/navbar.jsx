@@ -35,7 +35,6 @@ export default function Navbar({ displayName, displayPic }) {
             {displayPic ? (
               <img
                 className={styles.displayPic}
-                style={{ height: "40px", borderRadius: "50%" }}
                 src={displayPic}
                 alt="display pic"
               />
