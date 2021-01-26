@@ -6,14 +6,19 @@ import styles from "./navbar.module.scss";
 import { auth } from "../../firebase";
 import logo from "./logo.png";
 import DrawerBox from "./drawer";
-import { drawerToggle, themeToggle } from "../../Redux/Action/action";
+import { drawerToggle } from "../../Redux/Action/action";
 
 // eslint-disable-next-line react/prop-types
 export default function Navbar({ displayName, displayPic }) {
   const dispatch = useDispatch();
-
+  const isDarkTheme = useSelector((state) => state.CONFIG.darkTheme);
   return (
-    <AppBar className={styles.appbar} position="static">
+    <AppBar
+      style={{
+        backgroundColor: `${isDarkTheme ? "#181818" : "rgb(255, 179, 36) "}`,
+      }}
+      position="static"
+    >
       <Toolbar className={styles.Toolbar}>
         <div className={styles.logoDiv}>
           <img className={styles.logo} src={logo} alt="logo" />

@@ -8,3 +8,8 @@ export const themeToggle = () => ({
 export const drawerToggle = () => ({
   type: actionTypes.DRAWER_TOGGLE,
 });
+
+export const setUserInfo = (info) => ({
+  type: actionTypes.SET_USER_INFO,
+  payload: info,
+});

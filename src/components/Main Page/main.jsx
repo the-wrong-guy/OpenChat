@@ -1,17 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Paper, Button } from "@material-ui/core";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import firebase from "firebase";
-import cx from "classnames";
+import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { auth, db } from "../../firebase";
+import { setUserInfo } from "../../Redux/Action/action";
 import Navbar from "../Layout/navbar";
 import Message from "../Message/message";
 import styles from "./main.module.scss";
 import Loader from "../Loader/loader";
 
 export default function Main() {
+  const isDarkTheme = useSelector((state) => state.CONFIG.darkTheme);
+  const palletType = isDarkTheme ? "dark" : "light";
+  const darkTheme = createMuiTheme({
+    palette: {
+      type: palletType,
+    },
+  });
+  // -----------------------------------------//
+  const dispatch = useDispatch();
   const [senderMsg, setSenderMsg] = useState("");
   // const [query, SetQuery] = useState(null);
   const messagesRef = db.collection("messages");
@@ -32,7 +43,7 @@ export default function Main() {
     }
   }, [query]);
 
-  useEffect(() => {
+  useEffect(async () => {
     // eslint-disable-next-line no-shadow
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -41,6 +52,7 @@ export default function Main() {
           displayName: user.displayName,
           displayPhoto: user.photoURL,
         });
+        dispatch(setUserInfo(user));
         setLoading(false);
         history.push("/");
       } else {
@@ -74,64 +86,70 @@ export default function Main() {
       console.log(error);
     }
   };
+
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className={styles.container}
-    >
-      {loading ? (
-        <div className={styles.loaderDiv}>
-          <Loader />
-        </div>
-      ) : (
-        <div>
-          <Navbar
-            displayName={userDetails.displayName}
-            displayPic={userDetails.displayPhoto}
-          />
-          <div className={styles.messageBox}>
-            <div className={styles.innnerContainer}>
-              <main className={styles.main}>
-                {messages &&
-                  user &&
-                  messages.map((msg) => <Message key={msg.id} message={msg} />)}
+    <ThemeProvider theme={darkTheme}>
+      <Paper
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className={styles.container}
+        component={motion.div}
+      >
+        {loading ? (
+          <div className={styles.loaderDiv}>
+            <Loader />
+          </div>
+        ) : (
+          <div>
+            <Navbar
+              displayName={userDetails.displayName}
+              displayPic={userDetails.displayPhoto}
+            />
+            <div className={styles.messageBox}>
+              <div className={styles.innnerContainer}>
+                <main className={styles.main}>
+                  {messages &&
+                    user &&
+                    messages.map((msg) => (
+                      <Message key={msg.id} message={msg} />
+                    ))}
 
-                <span
-                  style={{ position: "relative", width: "100%" }}
-                  ref={emptyDiv}
-                ></span>
-              </main>
-              <form className={styles.form} onSubmit={sendMessage}>
-                <Paper elevation={15} className={styles.inputCard}>
-                  <input
-                    name="message"
-                    type="text"
-                    value={senderMsg}
-                    onChange={(e) => setSenderMsg(e.target.value)}
-                    placeholder="Enter your message here"
-                  />
-                </Paper>
+                  <span
+                    style={{ position: "relative", width: "100%" }}
+                    ref={emptyDiv}
+                  ></span>
+                </main>
+                <form className={styles.form} onSubmit={sendMessage}>
+                  <Paper elevation={15} className={styles.inputCard}>
+                    <input
+                      name="message"
+                      type="text"
+                      value={senderMsg}
+                      onChange={(e) => setSenderMsg(e.target.value)}
+                      placeholder="Enter your message here"
+                    />
+                  </Paper>
 
-                <Button
-                  className={styles.Button}
-                  variant="contained"
-                  onClick={sendMessage}
-                  type="submit"
-                  size="small"
-                >
-                  Send
-                  <img
-                    src="https://img.icons8.com/plasticine/30/000000/paper-plane.png"
-                    alt="button"
-                  />
-                </Button>
-              </form>
+                  <Button
+                    className={styles.Button}
+                    variant="contained"
+                    onClick={sendMessage}
+                    type="submit"
+                    size="small"
+                  >
+                    Send
+                    <img
+                      src="https://img.icons8.com/plasticine/30/000000/paper-plane.png"
+                      alt="button"
+                    />
+                  </Button>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </motion.div>
+        )}
+      </Paper>
+    </ThemeProvider>
   );
 }

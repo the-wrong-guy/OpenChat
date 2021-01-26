@@ -1,6 +1,7 @@
 const TYPES = {
   THEME_TOGGLE: "THEME_TOGGLE",
   DRAWER_TOGGLE: "DRAWER_TOGGLE",
+  SET_USER_INFO: "SET_USER_INFO",
 };
 
 export default TYPES;

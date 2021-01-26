@@ -116,6 +116,10 @@
     height: calc(100% - 70px);
   }
 
+  .main::-webkit-scrollbar {
+    display: none;
+  }
+
   // .inputCard {
   //   height: 40px;
   // }

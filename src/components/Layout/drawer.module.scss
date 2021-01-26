@@ -11,6 +11,21 @@ $font: "Open Sans", sans-serif;
 
 .list {
   width: 300px !important;
+  height: 100vh !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.firstDiv {
+  height: 80vh !important;
+}
+
+.secondDiv {
+  height: calc(100vh - 80vh) !important;
+}
+
+input[type="checkbox"]:focus {
+  outline: none !important;
 }
 
 .toggle {
@@ -27,6 +42,7 @@ $font: "Open Sans", sans-serif;
     outline: none;
     border: none;
   }
+
   input {
     cursor: pointer;
     position: absolute;
@@ -97,15 +113,50 @@ $font: "Open Sans", sans-serif;
 .logoutBtn {
   text-transform: unset !important;
   display: flex !important;
-  background-color: rgb(236, 209, 149) !important;
+  // background-color: rgb(236, 209, 149) !important;
   span {
     padding-right: 5px;
-    font-weight: 400;
+    // font-weight: 400;
   }
 }
 
+.userInfoItem {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center !important;
+  gap: 10px !important;
+  img {
+    height: 50px;
+    border-radius: 50%;
+  }
+  span {
+    font-size: 1.2rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  }
+}
+
+.contactDevItem {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 13px !important;
+  text-align: center !important;
+}
+
 @media only screen and (max-width: 710px) {
+  input[type="checkbox"]:focus {
+    outline: none !important;
+  }
   .list {
     width: 100vw !important;
+  }
+  .userInfoItem {
+    img {
+      height: 40px;
+    }
+    span {
+      font-size: 1.1rem;
+    }
   }
 }

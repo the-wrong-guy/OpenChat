@@ -5,17 +5,67 @@ import List from "@material-ui/core/List";
 import { motion } from "framer-motion";
 import { Drawer, IconButton, Button } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
+import InstagramIcon from "@material-ui/icons/Instagram";
+import GitHubIcon from "@material-ui/icons/GitHub";
 import ListItem from "@material-ui/core/ListItem";
-import { drawerToggle, themeToggle } from "../../Redux/Action/action";
+import {
+  drawerToggle,
+  themeToggle,
+  setUserInfo,
+} from "../../Redux/Action/action";
 import { auth } from "../../firebase";
 import styles from "./drawer.module.scss";
 
 // eslint-disable-next-line react/prop-types
+
+const drawerVariants = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 2,
+      ease: "easeInOut",
+    },
+  },
+};
+
+const svgVariants = {
+  hidden: {
+    rotate: -180,
+  },
+  visible: {
+    rotate: 0,
+    transition: {
+      duration: 1,
+    },
+  },
+};
+
+const pathVariants = {
+  hidden: {
+    opacity: 0,
+    pathLength: 0,
+    color: "pink",
+  },
+  visible: {
+    opacity: 1,
+    pathLength: 1,
+    color: "#000",
+    transition: {
+      duration: 2,
+      ease: "easeInOut",
+    },
+  },
+};
+
 export default function DrawerBox() {
   const history = useHistory();
   const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.CONFIG.drawerOpen);
   const isDarkTheme = useSelector((state) => state.CONFIG.darkTheme);
+  const userInfo = useSelector((state) => state.CONFIG.userInfo);
 
   const toggleDrawer = () => async (event) => {
     if (
@@ -35,132 +85,175 @@ export default function DrawerBox() {
     try {
       await auth.signOut();
       dispatch(drawerToggle());
+      dispatch(setUserInfo(null));
       history.push("/login");
     } catch (error) {
       console.log(error);
     }
   };
 
-  const svgVariants = {
-    hidden: {
-      rotate: -180,
-    },
-    visible: {
-      rotate: 0,
-      transition: {
-        duration: 1,
-      },
-    },
-  };
-
-  const pathVariants = {
-    hidden: {
-      opacity: 0,
-      pathLength: 0,
-      color: "pink",
-    },
-    visible: {
-      opacity: 1,
-      pathLength: 1,
-      color: "#000",
-      transition: {
-        duration: 2,
-        ease: "easeInOut",
-      },
-    },
-  };
   return (
-    <Drawer onClose={toggleDrawer(false)} anchor="left" open={isOpen}>
+    <Drawer
+      component={motion.div}
+      variants={drawerVariants}
+      initial="hidden"
+      animate="visible"
+      onClose={toggleDrawer(false)}
+      anchor="left"
+      open={isOpen}
+    >
       <List className={styles.list}>
-        <ListItem
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
-          <IconButton onClick={() => dispatch(drawerToggle())}>
-            <motion.svg
-              width="24"
-              height="24"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              color="#000"
-              variants={svgVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <motion.path
-                d="M0 0h24v24H0z"
-                fill="none"
-                variants={pathVariants}
-              ></motion.path>
-              <motion.path
-                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-                variants={pathVariants}
-              ></motion.path>
-            </motion.svg>
-          </IconButton>
-        </ListItem>
-        <ListItem
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "10px",
-            padding: "27px 0",
-          }}
-        >
-          <span style={{ fontSize: "1rem", fontWeight: "600" }}>
-            Theme Mode
-          </span>
-          <div className={styles.toggle} title="toggle dark mode">
-            <label htmlFor="checkBox">
-              <input
-                type="checkbox"
-                onChange={handleChecked}
-                checked={isDarkTheme}
-                name=""
-              />
-              <span></span>
-            </label>
-          </div>
-        </ListItem>
-        <Divider />
-        <ListItem
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Button
-            className={styles.logoutBtn}
-            variant="contained"
-            color="default"
-            onClick={handleLogout}
+        <div className={styles.firstDiv}>
+          <ListItem
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
           >
-            <span>Logout</span>
-            <svg
-              width="24"
-              height="24"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              color="#000"
-              stroke="currentColor"
+            <IconButton onClick={() => dispatch(drawerToggle())}>
+              <motion.svg
+                width="24"
+                height="24"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                color="#000"
+                variants={svgVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <motion.path
+                  d="M0 0h24v24H0z"
+                  fill="none"
+                  variants={pathVariants}
+                ></motion.path>
+                <motion.path
+                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                  variants={pathVariants}
+                ></motion.path>
+              </motion.svg>
+            </IconButton>
+          </ListItem>
+          {userInfo && (
+            <ListItem className={styles.userInfoItem}>
+              <img src={userInfo.photoURL} alt="User" />
+              <span>{userInfo.displayName}</span>
+            </ListItem>
+          )}
+          <Divider />
+          <ListItem
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "10px",
+              padding: "27px 0",
+            }}
+          >
+            <span style={{ fontSize: "1rem", fontWeight: "600" }}>
+              Theme Mode
+            </span>
+            <div className={styles.toggle} title="toggle dark mode">
+              <label htmlFor="checkBox">
+                <input
+                  type="checkbox"
+                  onChange={handleChecked}
+                  checked={isDarkTheme}
+                  name=""
+                />
+                <span></span>
+              </label>
+            </div>
+          </ListItem>
+          <ListItem style={{ display: "flex", flexDirection: "column" }}>
+            <span>Follow the Dev</span>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <IconButton>
+                <InstagramIcon />
+              </IconButton>
+              <IconButton>
+                <GitHubIcon />
+              </IconButton>
+            </div>
+          </ListItem>
+          <ListItem className={styles.contactDevItem}>
+            <span style={{ fontWeight: "500" }}>
+              Have some ideas to improve this platform?
+            </span>
+            <a
+              style={{ textDecoration: "none" }}
+              href="mailto:bhargab.contact@gmail.com ;?subject=Suggestions%2FFeatures%20that%20will%20improve%20the%20platform"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-              ></path>
-            </svg>
-          </Button>
-        </ListItem>
+              <Button
+                variant="contained"
+                size="small"
+                style={{ textTransform: "unset" }}
+                component={motion.div}
+              >
+                <span>Contact</span>
+                <motion.svg
+                  width="30"
+                  height="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  color="red"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  ></path>
+                </motion.svg>
+              </Button>
+            </a>
+          </ListItem>
+          <Divider />
+        </div>
+        <div className={styles.secondDiv}>
+          <ListItem
+            style={{
+              height: "100%",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <Button
+              className={styles.logoutBtn}
+              variant="contained"
+              color="default"
+              onClick={handleLogout}
+              size="small"
+            >
+              <span>Logout</span>
+              <svg
+                width="24"
+                height="24"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                color="#000"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                ></path>
+              </svg>
+            </Button>
+            <span style={{ marginTop: "auto" }}>Made with ❤ and ⌚</span>
+          </ListItem>
+        </div>
       </List>
     </Drawer>
   );
