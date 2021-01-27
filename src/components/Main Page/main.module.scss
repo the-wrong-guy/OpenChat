@@ -19,6 +19,7 @@
   height: calc(100vh - 64px) !important;
   display: flex;
   justify-content: center;
+  // background: #eaf5ea;
 }
 
 .innnerContainer {
@@ -38,9 +39,14 @@
   // height: 10vh;
   // position: absolute;
 
+  .imgInput {
+    display: none;
+  }
+
   .inputCard {
+    display: flex;
+    flex-grow: 1;
     position: relative;
-    width: 90% !important;
     height: 50px;
     border-radius: 1000px;
     outline: none;
@@ -59,10 +65,16 @@
     }
   }
   .Button {
-    // height: 40px !important;
-    width: 100px;
+    padding: 0 !important;
+    height: 50px;
+    width: 50px !important;
+    border-radius: 50% !important;
+    // width: 100px;
     background: rgb(255, 179, 36) !important;
+    background: rgba($color: #ffffff, $alpha: 0.1);
     font-weight: 600 !important;
+    outline: none;
+    border-style: solid;
   }
 }
 
@@ -75,6 +87,7 @@
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  border-left: 4px solid #eaf5ea;
 }
 
 .main::-webkit-scrollbar {
@@ -114,6 +127,7 @@
 
   .main {
     height: calc(100% - 70px);
+    border-left: none;
   }
 
   .main::-webkit-scrollbar {

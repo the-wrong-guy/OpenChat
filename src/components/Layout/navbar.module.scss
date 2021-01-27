@@ -1,5 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Damion&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Alatsi&display=swap");
+
 .appbar {
   background: rgb(255, 179, 36) !important;
 }
@@ -22,11 +23,11 @@
   }
 
   span {
-    // font-family: "Damion", cursive;
-    font-family: "Hammersmith One", sans-serif;
-    font-weight: 100;
+    // font-family: "Hammersmith One", sans-serif;
+    font-family: "Alatsi", sans-serif;
+    // font-weight: 100;
     font-size: 30px;
-    letter-spacing: 2px;
+    // letter-spacing: 2px;
   }
 }
 

@@ -1,17 +1,22 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect, useRef } from "react";
-import { Paper, Button } from "@material-ui/core";
+import { Paper, Button, IconButton } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { PhotoCamera } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import firebase from "firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { auth, db } from "../../firebase";
+import { auth, db, storage } from "../../firebase";
 import { setUserInfo } from "../../Redux/Action/action";
 import Navbar from "../Layout/navbar";
 import Message from "../Message/message";
 import styles from "./main.module.scss";
 import Loader from "../Loader/loader";
+
+import sendAudio from "../../Message Sounds/among_us_chat_sound.mp3";
+import recieveAudio from "../../Message Sounds/facebook_chat_sound.mp3";
 
 export default function Main() {
   const isDarkTheme = useSelector((state) => state.CONFIG.darkTheme);
@@ -22,8 +27,10 @@ export default function Main() {
     },
   });
   // -----------------------------------------//
+
   const dispatch = useDispatch();
   const [senderMsg, setSenderMsg] = useState("");
+  const [senderImg, setSenderImg] = useState(null);
   // const [query, SetQuery] = useState(null);
   const messagesRef = db.collection("messages");
   const query = messagesRef.orderBy("createdAt", "asc").limit(100);
@@ -41,7 +48,17 @@ export default function Main() {
     if (emptyDiv.current) {
       emptyDiv.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [query]);
+    // setInterval(() => {}, 3000);
+    // if (messages) {
+    //   // eslint-disable-next-line array-callback-return
+    //   messages.map((msg) => {
+    //     if (msg.uid !== user.uid) {
+    //       // eslint-disable-next-line no-undef
+    //       new Audio(recieveAudio).play();
+    //     }
+    //   });
+    // }
+  }, [messages]);
 
   useEffect(async () => {
     // eslint-disable-next-line no-shadow
@@ -68,16 +85,49 @@ export default function Main() {
     e.preventDefault();
 
     try {
-      if (user && senderMsg !== "") {
+      if (user && (senderMsg !== "" || senderImg !== null)) {
         const { uid, photoURL, displayName } = user;
-        await db.collection("messages").add({
-          text: senderMsg,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          uid,
-          photoURL,
-          displayName,
-        });
-        setSenderMsg("");
+        if (senderMsg !== "" && senderImg === null) {
+          await db.collection("messages").add({
+            text: senderMsg,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            uid,
+            photoURL,
+            displayName,
+          });
+          setSenderMsg("");
+        } else if (senderMsg === "" && senderImg !== null) {
+          const storageRef = storage.ref();
+          const fileRef = storageRef.child(senderImg.name);
+          await fileRef.put(senderImg);
+          setSenderImg(null);
+          const fileUrl = await fileRef.getDownloadURL();
+          await db.collection("messages").add({
+            photoMsg: fileUrl,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            uid,
+            photoURL,
+            displayName,
+          });
+        } else if (senderMsg !== "" && senderImg !== null) {
+          const storageRef = storage.ref();
+          const fileRef = storageRef.child(senderImg.name);
+          await fileRef.put(senderImg);
+          setSenderImg(null);
+          const fileUrl = await fileRef.getDownloadURL();
+          await db.collection("messages").add({
+            text: senderMsg,
+            photoMsg: fileUrl,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            uid,
+            photoURL,
+            displayName,
+          });
+          setSenderMsg("");
+        }
+
+        // eslint-disable-next-line no-undef
+        new Audio(sendAudio).play();
         emptyDiv.current.scrollIntoView({ behavior: "smooth" });
       } else {
         return;
@@ -87,6 +137,11 @@ export default function Main() {
     }
   };
 
+  const handleImgChange = (e) => {
+    if (e.target.files[0]) {
+      setSenderImg(e.target.files[0]);
+    }
+  };
   return (
     <ThemeProvider theme={darkTheme}>
       <Paper
@@ -123,6 +178,7 @@ export default function Main() {
                 <form className={styles.form} onSubmit={sendMessage}>
                   <Paper elevation={15} className={styles.inputCard}>
                     <input
+                      fullWidth
                       name="message"
                       type="text"
                       value={senderMsg}
@@ -130,15 +186,41 @@ export default function Main() {
                       placeholder="Enter your message here"
                     />
                   </Paper>
-
+                  <div>
+                    <input
+                      accept="image/*"
+                      onChange={handleImgChange}
+                      className={styles.imgInput}
+                      id="icon-button-file"
+                      type="file"
+                    />
+                    <label htmlFor="icon-button-file">
+                      <IconButton
+                        color="primary"
+                        aria-label="upload picture"
+                        component="span"
+                        style={{ position: "relative" }}
+                      >
+                        <PhotoCamera />
+                        {senderImg && (
+                          <span
+                            style={{
+                              color: "red",
+                              fontSize: "60px",
+                            }}
+                          >
+                            .
+                          </span>
+                        )}
+                      </IconButton>
+                    </label>
+                  </div>
                   <Button
                     className={styles.Button}
                     variant="contained"
                     onClick={sendMessage}
                     type="submit"
-                    size="small"
                   >
-                    Send
                     <img
                       src="https://img.icons8.com/plasticine/30/000000/paper-plane.png"
                       alt="button"

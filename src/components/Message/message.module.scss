@@ -1,3 +1,6 @@
+// for media query of display pic
+$height-width-dp: 33px;
+
 @mixin container {
   position: relative;
   width: 350px;
@@ -15,6 +18,12 @@
     border-radius: 50% !important;
     // border: 1px solid #fa2af0;
   }
+  @media screen and (max-width: 650px) {
+    img {
+      height: $height-width-dp;
+      width: $height-width-dp;
+    }
+  }
 }
 
 @mixin infoDiv {
@@ -28,6 +37,9 @@
   font-size: 17px;
   font-weight: 600;
   margin-right: 10px;
+  @media screen and (max-width: 650px) {
+    font-size: 14px !important;
+  }
 }
 
 @mixin text {
@@ -45,6 +57,9 @@
   hyphens: manual;
 
   color: #ffffff;
+  @media screen and (max-width: 650px) {
+    font-size: 14px !important;
+  }
 }
 @mixin textDiv {
   position: relative;
@@ -52,7 +67,6 @@
   max-width: 330px !important;
   padding: 3px 10px;
   border-radius: 15px;
-  background-color: #9c9c9c;
 }
 
 .SendContainer {
@@ -88,9 +102,7 @@
 }
 
 .displayName {
-  font-size: 17px;
-  font-weight: 600;
-  margin-right: 10px;
+  @include displayName();
 }
 
 .displayNameSend {
@@ -99,17 +111,38 @@
 
 .time {
   font-weight: 200;
-  color: #505050;
 }
 
 .textDiv {
   @include textDiv();
+  background: #9e9c9c;
   // text-align: left;
 }
 
 .textDivSend {
   @include textDiv();
+  background: rgb(173, 85, 255);
   // text-align: right;
+}
+
+.photoMsgDivSend {
+  position: relative;
+  min-width: 50px;
+  max-width: 330px;
+  min-height: 50px;
+  max-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+  border-radius: 5px;
+}
+
+.photoMsg {
+  position: relative;
+  max-width: 80%;
+  max-height: 100%;
+  object-fit: cover;
 }
 
 .text {
@@ -121,9 +154,7 @@
 }
 
 @media only screen and (max-width: 710px) {
-  .textDiv {
-    max-width: 290px !important;
-  }
+  .textDiv,
   .textDivSend {
     max-width: 290px !important;
   }
