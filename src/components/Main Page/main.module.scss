@@ -66,8 +66,8 @@
   }
   .Button {
     padding: 0 !important;
-    height: 50px;
-    width: 50px !important;
+    height: 40px;
+    min-width: 40px !important;
     border-radius: 50% !important;
     // width: 100px;
     background: rgb(255, 179, 36) !important;
@@ -117,7 +117,8 @@
       height: 42px;
     }
     .Button {
-      width: 50px;
+      height: 30px !important;
+      min-width: 30px !important;
       font-size: 12px !important;
       img {
         height: 20px;

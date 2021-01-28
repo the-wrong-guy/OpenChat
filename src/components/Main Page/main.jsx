@@ -206,17 +206,9 @@ export default function Main() {
                         component="span"
                         style={{ position: "relative" }}
                       >
-                        <PhotoCamera />
-                        {senderImg && (
-                          <span
-                            style={{
-                              color: "red",
-                              fontSize: "60px",
-                            }}
-                          >
-                            .
-                          </span>
-                        )}
+                        <PhotoCamera
+                          style={{ color: `${senderImg ? "green" : "grey"}` }}
+                        />
                       </IconButton>
                     </label>
                   </div>

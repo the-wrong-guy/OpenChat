@@ -126,6 +126,7 @@ $height-width-dp: 33px;
 }
 
 .photoMsgDivSend {
+  overflow: hidden;
   position: relative;
   min-width: 50px;
   max-width: 330px;
@@ -134,7 +135,7 @@ $height-width-dp: 33px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #ffffff;
+  border: 2px solid rgb(168, 168, 167);
   border-radius: 5px;
 }
 
