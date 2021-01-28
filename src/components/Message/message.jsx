@@ -84,7 +84,7 @@ export default function Message(props) {
                 style={{ color: `${isDarkTheme ? "#19e6a1" : "#505050"}` }}
                 className={styles.time}
               >
-                {createdAt && moment(createdAt.toDate()).fromNow()}
+                {createdAt && formatDate(new Date(createdAt.seconds * 1000))}
               </span>
             </div>
             {text && (
