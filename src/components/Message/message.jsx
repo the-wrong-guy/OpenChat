@@ -2,6 +2,7 @@
 /* eslint-disable react/destructuring-assignment */
 import React from "react";
 import moment from "moment";
+import { formatRelative } from "date-fns";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { auth } from "../../firebase";
@@ -37,6 +38,7 @@ const Transition = {
 export default function Message(props) {
   // eslint-disable-next-line react/destructuring-assignment
   // eslint-disable-next-line react/prop-types
+  // const [createdTime, setCreatedTime] = useState([]);
   const isDarkTheme = useSelector((state) => state.CONFIG.darkTheme);
   const {
     text,
@@ -46,6 +48,17 @@ export default function Message(props) {
     displayName,
     photoMsg,
   } = props.message;
+  const formatDate = (date) => {
+    let formattedDate = "";
+    if (date) {
+      // Convert the date in words relative to the current date
+      formattedDate = formatRelative(date, new Date());
+      // Uppercase the first letter
+      formattedDate =
+        formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+    }
+    return formattedDate;
+  };
   const match = uid === auth.currentUser.uid ? "sent" : "received";
   return (
     <div
@@ -110,7 +123,7 @@ export default function Message(props) {
                 style={{ color: `${isDarkTheme ? "#19e6a1" : "#505050"}` }}
                 className={styles.time}
               >
-                {createdAt && moment(createdAt.toDate()).fromNow()}
+                {createdAt && formatDate(new Date(createdAt.seconds * 1000))}
               </span>
             </div>
             {text && (

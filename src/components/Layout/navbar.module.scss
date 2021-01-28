@@ -27,13 +27,14 @@
     font-family: "Alatsi", sans-serif;
     // font-weight: 100;
     font-size: 30px;
-    // letter-spacing: 2px;
+    // letter-spacing: 2px;s
   }
 }
 
 .displayPic {
   border-radius: 50%;
   height: 40px;
+  width: 40px;
 }
 
 @media only screen and (max-width: 750px) {
@@ -48,6 +49,7 @@
   }
 
   .displayPic {
-    height: 25px;
+    height: 32px;
+    width: 32px;
   }
 }
