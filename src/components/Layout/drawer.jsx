@@ -158,10 +158,10 @@ export default function DrawerBox() {
             <div className={styles.toggle} title="toggle dark mode">
               <label htmlFor="checkBox">
                 <input
+                  id="checkBox"
                   type="checkbox"
                   onChange={handleChecked}
                   checked={isDarkTheme}
-                  name=""
                 />
                 <span></span>
               </label>

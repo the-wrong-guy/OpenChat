@@ -93,7 +93,17 @@ export default function Message(props) {
               </div>
             )}
             {photoMsg && (
-              <div className={styles.photoMsgDivSend}>
+              <div
+                style={{
+                  borderColor: `${
+                    isDarkTheme ? "rgb(173, 85, 255)" : "#505050"
+                  }`,
+                  background: `${
+                    isDarkTheme ? "rgb(173, 85, 255)" : "#505050"
+                  }`,
+                }}
+                className={styles.photoMsgDivSend}
+              >
                 <img className={styles.photoMsg} src={photoMsg} alt="message" />
               </div>
             )}
@@ -132,7 +142,13 @@ export default function Message(props) {
               </div>
             )}
             {photoMsg && (
-              <div className={styles.photoMsgDivSend}>
+              <div
+                style={{
+                  borderColor: `${isDarkTheme ? "#4877f8" : "#505050"}`,
+                  background: `${isDarkTheme ? "#4877f8" : "#505050"}`,
+                }}
+                className={styles.photoMsgDivSend}
+              >
                 <img className={styles.photoMsg} src={photoMsg} alt="message" />
               </div>
             )}

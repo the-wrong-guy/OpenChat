@@ -115,7 +115,7 @@ $height-width-dp: 33px;
 
 .textDiv {
   @include textDiv();
-  background: #9e9c9c;
+  background: #4877f8;
   // text-align: left;
 }
 
@@ -135,8 +135,8 @@ $height-width-dp: 33px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid rgb(168, 168, 167);
-  border-radius: 5px;
+  border: 3.5px solid rgb(168, 168, 167);
+  border-radius: 7px;
 }
 
 .photoMsg {
@@ -158,5 +158,9 @@ $height-width-dp: 33px;
   .textDiv,
   .textDivSend {
     max-width: 290px !important;
+  }
+
+  .time {
+    font-size: 12.5px;
   }
 }
