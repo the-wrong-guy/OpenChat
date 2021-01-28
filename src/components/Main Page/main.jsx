@@ -5,6 +5,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { PhotoCamera } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import firebase from "firebase";
+import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -98,7 +99,9 @@ export default function Main() {
           setSenderMsg("");
         } else if (senderMsg === "" && senderImg !== null) {
           const storageRef = storage.ref();
-          const fileRef = storageRef.child(senderImg.name);
+          const fileRef = storageRef.child(
+            `images/${uuidv4()}-${senderImg.name}`
+          );
           await fileRef.put(senderImg);
           setSenderImg(null);
           const fileUrl = await fileRef.getDownloadURL();
@@ -111,7 +114,9 @@ export default function Main() {
           });
         } else if (senderMsg !== "" && senderImg !== null) {
           const storageRef = storage.ref();
-          const fileRef = storageRef.child(senderImg.name);
+          const fileRef = storageRef.child(
+            `images/${uuidv4()}-${senderImg.name}`
+          );
           await fileRef.put(senderImg);
           setSenderImg(null);
           const fileUrl = await fileRef.getDownloadURL();
