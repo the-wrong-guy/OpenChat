@@ -98,9 +98,6 @@ export default function Message(props) {
                   borderColor: `${
                     isDarkTheme ? "rgb(173, 85, 255)" : "#505050"
                   }`,
-                  background: `${
-                    isDarkTheme ? "rgb(173, 85, 255)" : "#505050"
-                  }`,
                 }}
                 className={styles.photoMsgDivSend}
               >
@@ -145,7 +142,6 @@ export default function Message(props) {
               <div
                 style={{
                   borderColor: `${isDarkTheme ? "#4877f8" : "#505050"}`,
-                  background: `${isDarkTheme ? "#4877f8" : "#505050"}`,
                 }}
                 className={styles.photoMsgDivSend}
               >

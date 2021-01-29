@@ -135,7 +135,9 @@
     display: none;
   }
 
-  // .inputCard {
-  //   height: 40px;
-  // }
+  .inputCard {
+    input {
+      font-size: 14.5px !important;
+    }
+  }
 }

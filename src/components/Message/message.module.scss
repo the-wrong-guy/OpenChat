@@ -45,7 +45,8 @@ $height-width-dp: 33px;
 @mixin text {
   position: relative;
   max-width: 100%;
-  text-align: justify !important;
+  height: 100%;
+  // text-align: justify !important;
   text-justify: inter-word;
   // word-break: break-all;
   word-wrap: break-word;
@@ -65,8 +66,13 @@ $height-width-dp: 33px;
   position: relative;
   min-width: 30px !important;
   max-width: 330px !important;
+  min-height: 25px !important;
+  max-width: 400px !important;
+  // height: 100%;
   padding: 3px 10px;
   border-radius: 15px;
+  display: flex;
+  align-items: center;
 }
 
 .SendContainer {
@@ -81,12 +87,12 @@ $height-width-dp: 33px;
 
 .displayPic {
   @include displayPic();
-  margin-left: 3px;
+  margin-left: 4.2px;
 }
 
 .displayPicSend {
   @include displayPic();
-  margin-right: 3px;
+  margin-right: 4.2px;
 }
 
 .infoDiv {
