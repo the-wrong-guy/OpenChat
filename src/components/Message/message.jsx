@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 import React from "react";
-import moment from "moment";
 import { formatRelative } from "date-fns";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
@@ -93,16 +92,22 @@ export default function Message(props) {
               </div>
             )}
             {photoMsg && (
-              <div
+              <motion.div
                 style={{
                   borderColor: `${
                     isDarkTheme ? "rgb(173, 85, 255)" : "#505050"
                   }`,
                 }}
                 className={styles.photoMsgDivSend}
+                whileTap={{ width: "100vw", height: "100vh" }}
               >
-                <img className={styles.photoMsg} src={photoMsg} alt="message" />
-              </div>
+                <motion.img
+                  className={styles.photoMsg}
+                  src={photoMsg}
+                  alt="message"
+                  whileTap={{ scale: 0.9 }}
+                />
+              </motion.div>
             )}
           </div>
           <div className={styles.displayPicSend}>
@@ -139,14 +144,20 @@ export default function Message(props) {
               </div>
             )}
             {photoMsg && (
-              <div
+              <motion.div
                 style={{
                   borderColor: `${isDarkTheme ? "#4877f8" : "#505050"}`,
                 }}
                 className={styles.photoMsgDivSend}
+                whileTap={{ width: "100vw", height: "100vh" }}
               >
-                <img className={styles.photoMsg} src={photoMsg} alt="message" />
-              </div>
+                <motion.img
+                  className={styles.photoMsg}
+                  src={photoMsg}
+                  alt="message"
+                  whileTap={{ scale: 0.9 }}
+                />
+              </motion.div>
             )}
           </div>
         </motion.div>

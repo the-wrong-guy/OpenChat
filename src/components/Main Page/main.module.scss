@@ -103,7 +103,71 @@
   background: rgb(255, 179, 36);
 }
 
+.imgPreviewDivSend {
+  overflow: hidden;
+  position: relative;
+  min-width: 50px;
+  max-width: 330px;
+  min-height: 50px;
+  max-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3.5px solid rgb(168, 168, 167);
+  border-radius: 7px;
+}
+
+.imgPreview {
+  outline: none;
+  border: none;
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  -webkit-filter: blur(5px);
+  filter: blur(3px);
+}
+
+.uploadBtn {
+  min-width: 50px !important;
+  height: 27px !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  text-transform: unset !important;
+  z-index: 100 !important;
+  border-radius: 10000px !important;
+  color: #ffffff !important;
+  background-color: rgba($color: #000000, $alpha: 0.5) !important;
+}
+
+.cancelPreviewBtn {
+  width: 30px !important;
+  height: 30px !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  z-index: 100 !important;
+  color: #000000 !important;
+}
+
+.uploadLoader {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 200 !important;
+}
+
+.cancelPreviewBtn:hover {
+  color: #fc1010 !important;
+}
+
 @media only screen and (max-width: 600px) {
+  $form-height: 57px;
   .messageBox {
     height: calc(100vh - 56px) !important;
   }
@@ -112,7 +176,7 @@
   }
 
   .form {
-    height: 70px;
+    height: $form-height;
     .inputCard {
       height: 42px;
     }
@@ -127,7 +191,7 @@
   }
 
   .main {
-    height: calc(100% - 70px);
+    height: calc(100% - #{$form-height});
     border-left: none;
   }
 

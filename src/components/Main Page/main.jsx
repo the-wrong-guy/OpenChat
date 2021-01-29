@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Paper, Button, IconButton } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { PhotoCamera } from "@material-ui/icons";
+import CancelIcon from "@material-ui/icons/Cancel";
 import { useHistory } from "react-router-dom";
 import firebase from "firebase";
 import { v4 as uuidv4 } from "uuid";
@@ -27,14 +28,16 @@ export default function Main() {
       type: palletType,
     },
   });
-  // -----------------------------------------//
+  // -----------------Setting Up the Dark Theme------------------------//
 
   const dispatch = useDispatch();
   const [senderMsg, setSenderMsg] = useState("");
   const [senderImg, setSenderImg] = useState(null);
+  const [imgPreview, setImgPreview] = useState(null);
+  const [uploadLoader, setUplaodLoader] = useState(false);
   // const [query, SetQuery] = useState(null);
   const messagesRef = db.collection("messages");
-  const query = messagesRef.orderBy("createdAt", "asc").limit(100);
+  const query = messagesRef.orderBy("createdAt", "asc");
   const [messages] = useCollectionData(query, { idField: "id" });
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(() => auth.currentUser);
@@ -49,16 +52,6 @@ export default function Main() {
     if (emptyDiv.current) {
       emptyDiv.current.scrollIntoView({ behavior: "smooth" });
     }
-    // setInterval(() => {}, 3000);
-    // if (messages) {
-    //   // eslint-disable-next-line array-callback-return
-    //   messages.map((msg) => {
-    //     if (msg.uid !== user.uid) {
-    //       // eslint-disable-next-line no-undef
-    //       new Audio(recieveAudio).play();
-    //     }
-    //   });
-    // }
   }, [messages]);
 
   useEffect(async () => {
@@ -96,13 +89,16 @@ export default function Main() {
             photoURL,
             displayName,
           });
+          // eslint-disable-next-line no-undef
+          new Audio(sendAudio).play();
           setSenderMsg("");
         } else if (senderMsg === "" && senderImg !== null) {
+          setUplaodLoader(true);
           const storageRef = storage.ref();
           const fileRef = storageRef.child(
             `images/${uuidv4()}-${senderImg.name}`
           );
-          await fileRef.put(senderImg);
+          const uploadTask = await fileRef.put(senderImg);
           setSenderImg(null);
           const fileUrl = await fileRef.getDownloadURL();
           await db.collection("messages").add({
@@ -112,7 +108,13 @@ export default function Main() {
             photoURL,
             displayName,
           });
+          // eslint-disable-next-line no-undef
+          new Audio(sendAudio).play();
+          setUplaodLoader(false);
         } else if (senderMsg !== "" && senderImg !== null) {
+          const tempTextmsg = senderMsg;
+          setSenderMsg("");
+          setUplaodLoader(true);
           const storageRef = storage.ref();
           const fileRef = storageRef.child(
             `images/${uuidv4()}-${senderImg.name}`
@@ -121,18 +123,18 @@ export default function Main() {
           setSenderImg(null);
           const fileUrl = await fileRef.getDownloadURL();
           await db.collection("messages").add({
-            text: senderMsg,
+            text: tempTextmsg,
             photoMsg: fileUrl,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             uid,
             photoURL,
             displayName,
           });
-          setSenderMsg("");
-        }
+          // eslint-disable-next-line no-undef
+          new Audio(sendAudio).play();
 
-        // eslint-disable-next-line no-undef
-        new Audio(sendAudio).play();
+          setUplaodLoader(false);
+        }
         emptyDiv.current.scrollIntoView({ behavior: "smooth" });
       } else {
         return;
@@ -147,6 +149,25 @@ export default function Main() {
       setSenderImg(e.target.files[0]);
     }
   };
+
+  useEffect(() => {
+    if (!senderImg) {
+      setImgPreview(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(senderImg);
+    setImgPreview(objectUrl);
+    emptyDiv.current.scrollIntoView({ behavior: "smooth" });
+    // Unmount
+    // eslint-disable-next-line consistent-return
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [senderImg]);
+
+  const handleImgCancel = () => {
+    setSenderImg(null);
+    // emptyDiv.current.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
       <Paper
@@ -174,6 +195,56 @@ export default function Main() {
                     messages.map((msg) => (
                       <Message key={msg.id} message={msg} />
                     ))}
+                  {senderImg && (
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        margin: "10px 0",
+                      }}
+                    >
+                      <div
+                        style={{
+                          borderColor: `${
+                            isDarkTheme ? "rgb(173, 85, 255)" : "#505050"
+                          }`,
+                        }}
+                        className={styles.imgPreviewDivSend}
+                      >
+                        <IconButton
+                          onClick={handleImgCancel}
+                          className={styles.cancelPreviewBtn}
+                        >
+                          <CancelIcon />
+                        </IconButton>
+                        {uploadLoader ? (
+                          <div className={styles.uploadLoader}>
+                            <img
+                              src="https://s2.svgbox.net/loaders.svg?ic=elastic-spinner&color=000000"
+                              width="32"
+                              height="32"
+                              alt="uplaod loader"
+                            />
+                          </div>
+                        ) : (
+                          <Button
+                            onClick={sendMessage}
+                            className={styles.uploadBtn}
+                            variant="contained"
+                          >
+                            Upload
+                          </Button>
+                        )}
+                        <img
+                          className={styles.imgPreview}
+                          src={imgPreview}
+                          alt="preview"
+                        />
+                      </div>
+                    </div>
+                  )}
 
                   <span
                     style={{ position: "relative", width: "100%" }}
@@ -181,9 +252,8 @@ export default function Main() {
                   ></span>
                 </main>
                 <form className={styles.form} onSubmit={sendMessage}>
-                  <Paper elevation={15} className={styles.inputCard}>
+                  <Paper elevation={20} className={styles.inputCard}>
                     <input
-                      fullWidth
                       name="message"
                       type="text"
                       value={senderMsg}
