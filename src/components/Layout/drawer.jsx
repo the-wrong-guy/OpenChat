@@ -251,6 +251,7 @@ export default function DrawerBox() {
                 ></path>
               </svg>
             </Button>
+            <span>Version : 1.0.0</span>
             <span style={{ marginTop: "auto" }}>Made with ❤ and ⌚</span>
           </ListItem>
         </div>

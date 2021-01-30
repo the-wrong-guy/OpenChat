@@ -35,6 +35,8 @@
   border-radius: 50%;
   height: 40px;
   width: 40px;
+  border: 2px solid;
+  // border-color: pink;
 }
 
 @media only screen and (max-width: 750px) {
@@ -51,5 +53,6 @@
   .displayPic {
     height: 32px;
     width: 32px;
+    border: 2px solid;
   }
 }

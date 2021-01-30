@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { auth } from "../../firebase";
 import styles from "./message.module.scss";
-import "./message.css";
+import "./message.scss";
 
 const VariantRecieve = {
   in: {
@@ -80,7 +80,7 @@ export default function Message(props) {
                 {match === "sent" ? "You" : displayName}
               </span>
               <span
-                style={{ color: `${isDarkTheme ? "#19e6a1" : "#505050"}` }}
+                style={{ color: `${isDarkTheme ? "#19e6a1" : "#6c9382"}` }}
                 className={styles.time}
               >
                 {createdAt && formatDate(new Date(createdAt.seconds * 1000))}
@@ -99,7 +99,7 @@ export default function Message(props) {
                   }`,
                 }}
                 className={styles.photoMsgDivSend}
-                whileTap={{ width: "100vw", height: "100vh" }}
+                whileTap={{ width: "85vw", height: "100vh" }}
               >
                 <motion.img
                   className={styles.photoMsg}
@@ -132,7 +132,7 @@ export default function Message(props) {
                 {match === "sent" ? "You" : displayName}
               </span>
               <span
-                style={{ color: `${isDarkTheme ? "#19e6a1" : "#505050"}` }}
+                style={{ color: `${isDarkTheme ? "#19e6a1" : "#6c9382"}` }}
                 className={styles.time}
               >
                 {createdAt && formatDate(new Date(createdAt.seconds * 1000))}
@@ -150,7 +150,7 @@ export default function Message(props) {
                   backgroundColor: "#4877f8",
                 }}
                 className={styles.photoMsgDivSend}
-                whileTap={{ width: "100vw", height: "100vh" }}
+                whileTap={{ width: "85vw", height: "100vh" }}
               >
                 <motion.img
                   className={styles.photoMsg}
