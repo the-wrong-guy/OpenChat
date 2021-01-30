@@ -35,6 +35,9 @@ export default function Navbar({ displayName, displayPic }) {
             {displayPic ? (
               <img
                 className={styles.displayPic}
+                style={{
+                  border: `1px solid ${isDarkTheme ? "#19e6a1" : "black"}`,
+                }}
                 src={displayPic}
                 alt="display pic"
               />

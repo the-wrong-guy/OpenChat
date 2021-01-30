@@ -147,6 +147,7 @@ export default function Message(props) {
               <motion.div
                 style={{
                   borderColor: `${isDarkTheme ? "#4877f8" : "#505050"}`,
+                  backgroundColor: "#4877f8",
                 }}
                 className={styles.photoMsgDivSend}
                 whileTap={{ width: "100vw", height: "100vh" }}

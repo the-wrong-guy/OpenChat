@@ -20,6 +20,23 @@ import Loader from "../Loader/loader";
 import sendAudio from "../../Message Sounds/among_us_chat_sound.mp3";
 import recieveAudio from "../../Message Sounds/facebook_chat_sound.mp3";
 
+const previewImgVariant = {
+  open: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      y: { stiffness: 1000, velocity: -100 },
+    },
+  },
+  closed: {
+    y: 50,
+    opacity: 0,
+    transition: {
+      y: { stiffness: 1000 },
+    },
+  },
+};
+
 export default function Main() {
   const isDarkTheme = useSelector((state) => state.CONFIG.darkTheme);
   const palletType = isDarkTheme ? "dark" : "light";
@@ -98,7 +115,7 @@ export default function Main() {
           const fileRef = storageRef.child(
             `images/${uuidv4()}-${senderImg.name}`
           );
-          const uploadTask = await fileRef.put(senderImg);
+          await fileRef.put(senderImg);
           setSenderImg(null);
           const fileUrl = await fileRef.getDownloadURL();
           await db.collection("messages").add({
@@ -196,7 +213,7 @@ export default function Main() {
                       <Message key={msg.id} message={msg} />
                     ))}
                   {senderImg && (
-                    <div
+                    <motion.div
                       style={{
                         width: "100%",
                         height: "100%",
@@ -204,8 +221,10 @@ export default function Main() {
                         justifyContent: "center",
                         margin: "10px 0",
                       }}
+                      variants={previewImgVariant}
+                      animate={imgPreview ? "open" : "closed"}
                     >
-                      <div
+                      <motion.div
                         style={{
                           borderColor: `${
                             isDarkTheme ? "rgb(173, 85, 255)" : "#505050"
@@ -242,8 +261,8 @@ export default function Main() {
                           src={imgPreview}
                           alt="preview"
                         />
-                      </div>
-                    </div>
+                      </motion.div>
+                    </motion.div>
                   )}
 
                   <span
