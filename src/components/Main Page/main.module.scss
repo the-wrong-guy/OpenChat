@@ -13,6 +13,26 @@
   z-index: 100;
 }
 
+.offlineDiv {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  div {
+    margin-top: 10px;
+    width: 280px;
+    height: 29px;
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    align-items: center;
+    background-color: #0dd661;
+    color: #000000;
+    border-radius: 1000px;
+    padding: 5px;
+  }
+}
+
 .messageBox {
   position: relative;
   width: 100%;
@@ -80,7 +100,7 @@
 
 .main {
   position: relative;
-  width: 100%;
+  width: auto;
   height: calc(100% - 68px);
   // margin: 10vh 0 10vh;
   overflow-y: scroll;
@@ -168,6 +188,11 @@
 
 @media only screen and (max-width: 600px) {
   $form-height: 57px;
+  .offlineDiv {
+    div {
+      width: 200px;
+    }
+  }
   .messageBox {
     height: calc(100vh - 56px) !important;
   }

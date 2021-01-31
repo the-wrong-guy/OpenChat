@@ -4,11 +4,13 @@ import { Paper, Button, IconButton } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { PhotoCamera } from "@material-ui/icons";
 import CancelIcon from "@material-ui/icons/Cancel";
+import WifiOffIcon from "@material-ui/icons/WifiOff";
 import { useHistory } from "react-router-dom";
 import firebase from "firebase";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
+import { Offline } from "react-detect-offline";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { auth, db, storage } from "../../firebase";
 import { setUserInfo } from "../../Redux/Action/action";
@@ -205,6 +207,16 @@ export default function Main() {
               displayName={userDetails.displayName}
               displayPic={userDetails.displayPhoto}
             />
+
+            <Offline>
+              <div className={styles.offlineDiv}>
+                <div>
+                  <span>You&apos;re Offline</span>
+                  <WifiOffIcon />
+                </div>
+              </div>
+            </Offline>
+
             <div className={styles.messageBox}>
               <div className={styles.innnerContainer}>
                 <main className={styles.main}>
