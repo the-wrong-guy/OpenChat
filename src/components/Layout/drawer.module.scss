@@ -9,6 +9,8 @@ $purple: #27173a;
 $yellow: #ffc207;
 $font: "Open Sans", sans-serif;
 
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
 .list {
   width: 300px !important;
   height: 100vh !important;
@@ -17,11 +19,11 @@ $font: "Open Sans", sans-serif;
 }
 
 .firstDiv {
-  height: 80vh !important;
+  height: 70vh !important;
 }
 
 .secondDiv {
-  height: calc(100vh - 80vh) !important;
+  height: calc(100vh - 70vh) !important;
 }
 
 input[type="checkbox"]:focus {
@@ -133,6 +135,13 @@ input[type="checkbox"]:focus {
   align-items: center !important;
   gap: 13px !important;
   text-align: center !important;
+}
+
+.credits {
+  margin-top: auto;
+  font-family: "Pacifico", cursive;
+  letter-spacing: 2px;
+  font-weight: 200 !important;
 }
 
 @media only screen and (max-width: 710px) {

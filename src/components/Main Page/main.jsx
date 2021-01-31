@@ -191,6 +191,7 @@ export default function Main() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        transition={{ when: "beforeChildren", staggerChildren: 0.4 }}
         className={styles.container}
         component={motion.div}
       >

@@ -226,6 +226,7 @@ export default function DrawerBox() {
               gap: "10px",
             }}
           >
+            <span>Version : 1.0.0</span>
             <Button
               className={styles.logoutBtn}
               variant="contained"
@@ -251,8 +252,7 @@ export default function DrawerBox() {
                 ></path>
               </svg>
             </Button>
-            <span>Version : 1.0.0</span>
-            <span style={{ marginTop: "auto" }}>Made with ❤ and ⌚</span>
+            <span className={styles.credits}>Made with 🖤 and ⌚</span>
           </ListItem>
         </div>
       </List>
