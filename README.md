@@ -1,3 +1,6 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/12f93168-82cc-451c-a317-3b83b2c0fc00/deploy-status)](https://app.netlify.com/sites/openchat-bhargab/deploys)
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
