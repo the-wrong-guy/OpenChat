@@ -28,8 +28,11 @@ const previewImgVariant = {
     opacity: 1,
   },
   out: {
-    y: 100,
+    y: "100%",
     opacity: 0,
+    transition: {
+      duration: 1,
+    },
   },
 };
 
