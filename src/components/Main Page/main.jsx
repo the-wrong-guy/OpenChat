@@ -9,7 +9,7 @@ import { useHistory } from "react-router-dom";
 import firebase from "firebase";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Offline } from "react-detect-offline";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { auth, db, storage } from "../../firebase";
@@ -20,22 +20,16 @@ import styles from "./main.module.scss";
 import Loader from "../Loader/loader";
 
 import sendAudio from "../../Message Sounds/among_us_chat_sound.mp3";
-import recieveAudio from "../../Message Sounds/facebook_chat_sound.mp3";
+// import recieveAudio from "../../Message Sounds/facebook_chat_sound.mp3";
 
 const previewImgVariant = {
-  open: {
+  in: {
     y: 0,
     opacity: 1,
-    transition: {
-      y: { stiffness: 1000, velocity: -100 },
-    },
   },
-  closed: {
-    y: 50,
+  out: {
+    y: 100,
     opacity: 0,
-    transition: {
-      y: { stiffness: 1000 },
-    },
   },
 };
 
@@ -69,7 +63,12 @@ export default function Main() {
 
   useEffect(() => {
     if (emptyDiv.current) {
-      emptyDiv.current.scrollIntoView({ behavior: "smooth" });
+      emptyDiv.current.scrollIntoView({
+        block: "nearest",
+        inline: "center",
+        behavior: "smooth",
+        alignToTop: false,
+      });
     }
   }, [messages]);
 
@@ -149,12 +148,10 @@ export default function Main() {
             photoURL,
             displayName,
           });
+          setUplaodLoader(false);
           // eslint-disable-next-line no-undef
           new Audio(sendAudio).play();
-
-          setUplaodLoader(false);
         }
-        emptyDiv.current.scrollIntoView({ behavior: "smooth" });
       } else {
         return;
       }
@@ -184,7 +181,7 @@ export default function Main() {
 
   const handleImgCancel = () => {
     setSenderImg(null);
-    // emptyDiv.current.scrollIntoView({ behavior: "smooth" });
+    emptyDiv.current.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -226,56 +223,64 @@ export default function Main() {
                       <Message key={msg.id} message={msg} />
                     ))}
                   {senderImg && (
-                    <motion.div
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        display: "flex",
-                        justifyContent: "center",
-                        margin: "10px 0",
-                      }}
-                      variants={previewImgVariant}
-                      animate={imgPreview ? "open" : "closed"}
-                    >
+                    <AnimatePresence>
                       <motion.div
                         style={{
-                          borderColor: `${
-                            isDarkTheme ? "rgb(173, 85, 255)" : "#505050"
-                          }`,
+                          width: "100%",
+                          height: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                          margin: "10px 0",
                         }}
-                        className={styles.imgPreviewDivSend}
+                        variants={previewImgVariant}
+                        initial="out"
+                        animate="in"
+                        exit="out"
+                        transition={{
+                          stiffness: 50,
+                          default: { duration: 1 },
+                        }}
                       >
-                        <IconButton
-                          onClick={handleImgCancel}
-                          className={styles.cancelPreviewBtn}
+                        <motion.div
+                          style={{
+                            borderColor: `${
+                              isDarkTheme ? "rgb(173, 85, 255)" : "#505050"
+                            }`,
+                          }}
+                          className={styles.imgPreviewDivSend}
                         >
-                          <CancelIcon />
-                        </IconButton>
-                        {uploadLoader ? (
-                          <div className={styles.uploadLoader}>
-                            <img
-                              src="https://s2.svgbox.net/loaders.svg?ic=elastic-spinner&color=000000"
-                              width="32"
-                              height="32"
-                              alt="uplaod loader"
-                            />
-                          </div>
-                        ) : (
-                          <Button
-                            onClick={sendMessage}
-                            className={styles.uploadBtn}
-                            variant="contained"
+                          <IconButton
+                            onClick={handleImgCancel}
+                            className={styles.cancelPreviewBtn}
                           >
-                            Upload
-                          </Button>
-                        )}
-                        <img
-                          className={styles.imgPreview}
-                          src={imgPreview}
-                          alt="preview"
-                        />
+                            <CancelIcon />
+                          </IconButton>
+                          {uploadLoader ? (
+                            <div className={styles.uploadLoader}>
+                              <img
+                                src="https://s2.svgbox.net/loaders.svg?ic=elastic-spinner&color=000000"
+                                width="32"
+                                height="32"
+                                alt="uplaod loader"
+                              />
+                            </div>
+                          ) : (
+                            <Button
+                              onClick={sendMessage}
+                              className={styles.uploadBtn}
+                              variant="contained"
+                            >
+                              Upload
+                            </Button>
+                          )}
+                          <img
+                            className={styles.imgPreview}
+                            src={imgPreview}
+                            alt="preview"
+                          />
+                        </motion.div>
                       </motion.div>
-                    </motion.div>
+                    </AnimatePresence>
                   )}
 
                   <span

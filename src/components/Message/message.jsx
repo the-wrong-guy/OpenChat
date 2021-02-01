@@ -32,7 +32,11 @@ const VariantSent = {
 
 const Transition = {
   type: "spring",
-  stiffness: 60,
+  stiffness: 70,
+  delay: 0.2,
+  when: "beforeChildren",
+  staggerChildren: 0.5,
+  velocity: 2,
 };
 export default function Message(props) {
   // eslint-disable-next-line react/destructuring-assignment
