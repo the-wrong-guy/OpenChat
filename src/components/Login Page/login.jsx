@@ -9,6 +9,7 @@ import styles from "./login.module.scss";
 import phoneImg from "./images/Untitled_design__15_-removebg-preview.png";
 import coupleChatting from "./images/Untitled_design__14_-removebg-preview.png";
 import chatIcon from "./images/chatIcon.png";
+import Loader from "../Loader/loader";
 
 export default function Login() {
   const history = useHistory();
@@ -59,7 +60,7 @@ export default function Login() {
       className={styles.container}
     >
       {loading ? (
-        "loading..."
+        <Loader />
       ) : (
         <>
           <div className={cx(styles.firstSection, styles.section)}>

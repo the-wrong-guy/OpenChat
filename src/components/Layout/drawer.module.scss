@@ -103,6 +103,21 @@ input[type="checkbox"]:focus {
   }
 }
 
+.instaBtn:hover {
+  background: radial-gradient(
+    circle at 30% 107%,
+    #fdf497 0%,
+    #fdf497 5%,
+    #fd5949 45%,
+    #d6249f 60%,
+    #285aeb 90%
+  ) !important;
+}
+
+.gitBtn:hover {
+  background: linear-gradient(rgb(238, 14, 238), rgb(0, 0, 0)) !important;
+}
+
 .logoutBtn {
   text-transform: unset !important;
   display: flex !important;

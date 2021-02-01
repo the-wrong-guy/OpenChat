@@ -47,12 +47,12 @@ const pathVariants = {
   hidden: {
     opacity: 0,
     pathLength: 0,
-    color: "pink",
+    color: "#fff",
   },
   visible: {
     opacity: 1,
     pathLength: 1,
-    color: "#000",
+    color: "rgb(173, 85, 255)",
     transition: {
       duration: 2,
       ease: "easeInOut",
@@ -170,10 +170,10 @@ export default function DrawerBox() {
           <ListItem style={{ display: "flex", flexDirection: "column" }}>
             <span>Follow the Dev</span>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <IconButton>
+              <IconButton className={styles.instaBtn}>
                 <InstagramIcon />
               </IconButton>
-              <IconButton>
+              <IconButton className={styles.gitBtn}>
                 <GitHubIcon />
               </IconButton>
             </div>

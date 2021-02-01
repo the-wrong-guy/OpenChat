@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^12.6.0",
     "classnames": "^2.2.6",
     "date-fns": "^2.16.1",
+    "dotenv": "^8.2.0",
     "emoji-picker-react": "^3.4.1",
     "eslint-config-airbnb": "^18.2.1",
     "firebase": "^8.2.3",
