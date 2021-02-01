@@ -110,6 +110,7 @@ export default function Message(props) {
                   src={photoMsg}
                   alt="message"
                   whileTap={{ scale: 0.9 }}
+                  loading="lazy"
                 />
               </motion.div>
             )}
@@ -161,6 +162,7 @@ export default function Message(props) {
                   src={photoMsg}
                   alt="message"
                   whileTap={{ scale: 0.9 }}
+                  loading="lazy"
                 />
               </motion.div>
             )}

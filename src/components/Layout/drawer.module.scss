@@ -19,11 +19,11 @@ $font: "Open Sans", sans-serif;
 }
 
 .firstDiv {
-  height: 70vh !important;
+  height: 60vh !important;
 }
 
 .secondDiv {
-  height: calc(100vh - 70vh) !important;
+  height: calc(100vh - 60vh) !important;
 }
 
 input[type="checkbox"]:focus {
@@ -114,11 +114,19 @@ input[type="checkbox"]:focus {
   ) !important;
 }
 
+.ver {
+  color: peachpuff;
+  font-weight: 200;
+  font-size: 13px;
+}
+
 .gitBtn:hover {
   background: linear-gradient(rgb(238, 14, 238), rgb(0, 0, 0)) !important;
 }
 
 .logoutBtn {
+  margin: 0 auto !important;
+  width: 98px !important;
   text-transform: unset !important;
   display: flex !important;
   // background-color: rgb(236, 209, 149) !important;
@@ -153,10 +161,9 @@ input[type="checkbox"]:focus {
 }
 
 .credits {
-  margin-top: auto;
   font-family: "Pacifico", cursive;
   letter-spacing: 2px;
-  font-weight: 200 !important;
+  text-align: center;
 }
 
 @media only screen and (max-width: 710px) {

@@ -138,80 +138,56 @@ export default function DrawerBox() {
           {userInfo && (
             <ListItem className={styles.userInfoItem}>
               <img src={userInfo.photoURL} alt="User" />
-              <span>{userInfo.displayName}</span>
+              <span style={{ color: "#DB6724" }}>{userInfo.displayName}</span>
             </ListItem>
           )}
           <Divider />
-          <ListItem
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "10px",
-              padding: "27px 0",
-            }}
-          >
-            <span style={{ fontSize: "1rem", fontWeight: "600" }}>
-              Theme Mode
-            </span>
-            <div className={styles.toggle} title="toggle dark mode">
-              <label htmlFor="checkBox">
-                <input
-                  id="checkBox"
-                  type="checkbox"
-                  onChange={handleChecked}
-                  checked={isDarkTheme}
-                />
-                <span></span>
-              </label>
-            </div>
-          </ListItem>
-          <ListItem style={{ display: "flex", flexDirection: "column" }}>
-            <span>Follow the Dev</span>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <IconButton className={styles.instaBtn}>
-                <InstagramIcon />
-              </IconButton>
-              <IconButton className={styles.gitBtn}>
-                <GitHubIcon />
-              </IconButton>
-            </div>
-          </ListItem>
-          <ListItem className={styles.contactDevItem}>
-            <span style={{ fontWeight: "500" }}>
-              Have some ideas to improve this platform?
-            </span>
-            <a
-              style={{ textDecoration: "none" }}
-              href="mailto:bhargab.contact@gmail.com ;?subject=Suggestions%2FFeatures%20that%20will%20improve%20the%20platform"
+          <div style={{ display: "grid", gap: "10px" }}>
+            <ListItem
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "10px",
+              }}
             >
-              <Button
-                variant="contained"
-                size="small"
-                style={{ textTransform: "unset" }}
-                component={motion.div}
-              >
-                <span>Contact</span>
-                <motion.svg
-                  width="30"
-                  height="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  color="red"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  ></path>
-                </motion.svg>
-              </Button>
-            </a>
-          </ListItem>
+              <span style={{ fontSize: "1rem", fontWeight: "400" }}>
+                Theme Mode
+              </span>
+              <div className={styles.toggle} title="toggle dark mode">
+                <label htmlFor="checkBox">
+                  <input
+                    id="checkBox"
+                    type="checkbox"
+                    onChange={handleChecked}
+                    checked={isDarkTheme}
+                  />
+                  <span></span>
+                </label>
+              </div>
+            </ListItem>
+            <ListItem style={{ display: "flex", flexDirection: "column" }}>
+              <span style={{ fontSize: "14px" }}>Follow the Dev</span>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <IconButton className={styles.instaBtn}>
+                  <InstagramIcon />
+                </IconButton>
+                <IconButton className={styles.gitBtn}>
+                  <GitHubIcon />
+                </IconButton>
+              </div>
+            </ListItem>
+            <ListItem
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <span className={styles.ver}>Version : 1.0.0</span>
+            </ListItem>
+          </div>
+
           <Divider />
         </div>
         <div className={styles.secondDiv}>
@@ -219,14 +195,45 @@ export default function DrawerBox() {
             style={{
               height: "100%",
               width: "100%",
-              display: "flex",
+              display: "grid",
               justifyContent: "center",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "10px",
+              alignContent: "space-between",
             }}
           >
-            <span>Version : 1.0.0</span>
+            <div className={styles.contactDevItem}>
+              <span style={{ fontWeight: "300" }}>
+                Have some ideas to improve this platform?
+              </span>
+              <a
+                style={{ textDecoration: "none" }}
+                href="mailto:bhargab.contact@gmail.com ;?subject=Suggestions%2FFeatures%20that%20will%20improve%20the%20platform"
+              >
+                <Button
+                  variant="contained"
+                  size="small"
+                  style={{ textTransform: "unset" }}
+                  component={motion.div}
+                >
+                  <span>Contact</span>
+                  <motion.svg
+                    width="30"
+                    height="24"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    color="red"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    ></path>
+                  </motion.svg>
+                </Button>
+              </a>
+            </div>
             <Button
               className={styles.logoutBtn}
               variant="contained"
