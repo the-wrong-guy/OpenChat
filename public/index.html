@@ -22,14 +22,4 @@
     <!--𝐃𝐨𝐧'𝐭 𝐭𝐫𝐲 𝐭𝐨 𝐜𝐨𝐩𝐲 𝐭𝐡𝐢𝐬 𝐚𝐩𝐩'𝐬 𝐜𝐨𝐝𝐞 , 𝐛𝐞 𝐫𝐞𝐚𝐥 𝐚𝐧𝐝 𝐜𝐫𝐞𝐚𝐭𝐞 𝐲𝐨𝐮𝐫 𝐨𝐰𝐧 𝐬𝐭𝐲𝐥𝐞 -->
     <div id="root"></div>
   </body>
-  <script> 
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('sw-cached-site.js', function() {
-        navigator.serviceWorker.register('service-worker.js', {
-          scope: '/',
-        });
-      });
-    } 
-    window.process = { env: { NODE_ENV: 'production' } };
- </script>
 </html>
