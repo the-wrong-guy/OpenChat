@@ -138,7 +138,17 @@ export default function DrawerBox() {
           {userInfo && (
             <ListItem className={styles.userInfoItem}>
               <img src={userInfo.photoURL} alt="User" />
-              <span style={{ color: "#DB6724" }}>{userInfo.displayName}</span>
+              <span
+                style={{
+                  color: `${isDarkTheme ? "#FFD200" : "#78c738"}`,
+                  background: `${isDarkTheme ? "#617B9E" : "#7D7F82"}`,
+                  borderRadius: "100px",
+                  lineHeight: "30px",
+                  padding: "0 7px",
+                }}
+              >
+                {userInfo.displayName}
+              </span>
             </ListItem>
           )}
           <Divider />
@@ -184,7 +194,12 @@ export default function DrawerBox() {
                 justifyContent: "center",
               }}
             >
-              <span className={styles.ver}>Version : 1.0.0</span>
+              <span
+                style={{ color: `${isDarkTheme ? "peachpuff" : "#252525"}` }}
+                className={styles.ver}
+              >
+                Version : 1.0.0
+              </span>
             </ListItem>
           </div>
 

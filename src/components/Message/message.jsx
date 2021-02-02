@@ -84,7 +84,7 @@ export default function Message(props) {
                 {match === "sent" ? "You" : displayName}
               </span>
               <span
-                style={{ color: `${isDarkTheme ? "#19e6a1" : "#6c9382"}` }}
+                style={{ color: `${isDarkTheme ? "#19e6a1" : "#52AD88"}` }}
                 className={styles.time}
               >
                 {createdAt && formatDate(new Date(createdAt.seconds * 1000))}
@@ -137,7 +137,7 @@ export default function Message(props) {
                 {match === "sent" ? "You" : displayName}
               </span>
               <span
-                style={{ color: `${isDarkTheme ? "#19e6a1" : "#6c9382"}` }}
+                style={{ color: `${isDarkTheme ? "#19e6a1" : "#52AD88"}` }}
                 className={styles.time}
               >
                 {createdAt && formatDate(new Date(createdAt.seconds * 1000))}

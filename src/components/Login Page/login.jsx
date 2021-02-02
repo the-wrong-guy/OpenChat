@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
+import firebase from "firebase";
 import { Paper, Button } from "@material-ui/core";
 import { motion } from "framer-motion";
-import firebase from "firebase";
 import cx from "classnames";
 import { useHistory } from "react-router-dom";
 import { auth } from "../../firebase";

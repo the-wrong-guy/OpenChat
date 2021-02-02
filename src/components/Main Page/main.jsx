@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect, useRef } from "react";
+import firebase from "firebase";
 import { Paper, Button, IconButton } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { PhotoCamera } from "@material-ui/icons";
 import CancelIcon from "@material-ui/icons/Cancel";
 import WifiOffIcon from "@material-ui/icons/WifiOff";
 import { useHistory } from "react-router-dom";
-import firebase from "firebase";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
