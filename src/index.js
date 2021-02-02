@@ -20,7 +20,7 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-serviceWorker.unregister();
+serviceWorker.register();
 
 // import reportWebVitals from "./reportWebVitals";
 // reportWebVitals(console.log);
