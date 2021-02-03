@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { AppBar, Toolbar, IconButton, Button } from "@material-ui/core";
+import React from "react";
+import { AppBar, Toolbar, IconButton } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import styles from "./navbar.module.scss";
-import { auth } from "../../firebase";
 import logo from "./logo.png";
 import DrawerBox from "./drawer";
 import { drawerToggle } from "../../Redux/Action/action";
@@ -36,7 +35,7 @@ export default function Navbar({ displayName, displayPic }) {
               <img
                 className={styles.displayPic}
                 style={{
-                  borderColor: `${isDarkTheme ? "#19e6a1" : "#FA05C5"}`,
+                  borderColor: `${isDarkTheme ? "#19e6a1" : "#7AAF50"}`,
                 }}
                 src={displayPic}
                 alt="display pic"

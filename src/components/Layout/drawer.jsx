@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import List from "@material-ui/core/List";
@@ -145,6 +145,7 @@ export default function DrawerBox() {
                   borderRadius: "100px",
                   lineHeight: "30px",
                   padding: "0 7px",
+                  fontSize: "15px",
                 }}
               >
                 {userInfo.displayName}
@@ -221,7 +222,7 @@ export default function DrawerBox() {
               </span>
               <a
                 style={{ textDecoration: "none" }}
-                href="mailto:bhargab.contact@gmail.com ;?subject=Suggestions%2FFeatures%20that%20will%20improve%20the%20platform"
+                href="mailto:bhargab.contact@gmail.com?subject=Ideas%20or%20Features%20to%20improve%20OpenChat%20%2F%20Bugs"
               >
                 <Button
                   variant="contained"

@@ -252,12 +252,15 @@ export default function Main() {
                           }}
                           className={styles.imgPreviewDivSend}
                         >
-                          <IconButton
-                            onClick={handleImgCancel}
-                            className={styles.cancelPreviewBtn}
-                          >
-                            <CancelIcon />
-                          </IconButton>
+                          {!uploadLoader && (
+                            <IconButton
+                              onClick={handleImgCancel}
+                              className={styles.cancelPreviewBtn}
+                            >
+                              <CancelIcon />
+                            </IconButton>
+                          )}
+
                           {uploadLoader ? (
                             <div className={styles.uploadLoader}>
                               <img
