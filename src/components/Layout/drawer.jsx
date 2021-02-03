@@ -202,12 +202,16 @@ export default function DrawerBox() {
             <ListItem style={{ display: "flex", flexDirection: "column" }}>
               <span style={{ fontSize: "14px" }}>Follow the Dev</span>
               <div style={{ display: "flex", justifyContent: "center" }}>
-                <IconButton className={styles.instaBtn}>
-                  <InstagramIcon href="https://www.facebook.com" />
-                </IconButton>
-                <IconButton className={styles.gitBtn}>
-                  <GitHubIcon />
-                </IconButton>
+                <a href="https://www.facebook.com">
+                  <IconButton className={styles.instaBtn}>
+                    <InstagramIcon />
+                  </IconButton>
+                </a>
+                <a href="https://www.instagram.com/">
+                  <IconButton className={styles.gitBtn}>
+                    <GitHubIcon />
+                  </IconButton>
+                </a>
               </div>
             </ListItem>
             <ListItem
