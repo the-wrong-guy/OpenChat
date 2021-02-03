@@ -76,9 +76,6 @@ function registerValidSW(swUrl, config) {
                 "New content is available and will be used when all " +
                   "tabs for this page are closed."
               );
-              // eslint-disable-next-line no-restricted-globals
-              self.skipWaiting();  
-              // test
 
               // Execute callback
               if (config && config.onUpdate) {
