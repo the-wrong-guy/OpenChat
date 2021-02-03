@@ -203,7 +203,7 @@ export default function DrawerBox() {
               <span style={{ fontSize: "14px" }}>Follow the Dev</span>
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <IconButton className={styles.instaBtn}>
-                  <InstagramIcon />
+                  <InstagramIcon href="https://www.facebook.com" />
                 </IconButton>
                 <IconButton className={styles.gitBtn}>
                   <GitHubIcon />
