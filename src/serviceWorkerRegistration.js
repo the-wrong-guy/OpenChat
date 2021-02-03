@@ -12,6 +12,10 @@
 
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://cra.link/PWA
+import { useDispatch } from "react-redux";
+import { swUpdate } from "./Redux/Action/action";
+
+const dispatch = useDispatch();
 
 const isLocalhost = Boolean(
   window.location.hostname === "localhost" ||
@@ -79,7 +83,10 @@ function registerValidSW(swUrl, config) {
 
               // Execute callback
               if (config && config.onUpdate) {
-                config.onUpdate(registration);
+                // eslint-disable-next-line no-shadow
+                config.onUpdate((registration) => {
+                  dispatch(swUpdate(registration));
+                });
               }
             } else {
               // At this point, everything has been precached.

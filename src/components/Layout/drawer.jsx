@@ -206,8 +206,9 @@ export default function DrawerBox() {
                   target="_blank"
                   rel="noreferrer"
                   href="https://www.instagram.com/________the_wrong_guy_______/"
+                  style={{ textDecoration: "none", outline: "none" }}
                 >
-                  <IconButton className={styles.instaBtn}>
+                  <IconButton>
                     <InstagramIcon />
                   </IconButton>
                 </a>
@@ -215,8 +216,9 @@ export default function DrawerBox() {
                   target="_blank"
                   rel="noreferrer"
                   href="https://github.com/the-wrong-guy/"
+                  style={{ textDecoration: "none", outline: "none" }}
                 >
-                  <IconButton className={styles.gitBtn}>
+                  <IconButton>
                     <GitHubIcon />
                   </IconButton>
                 </a>
