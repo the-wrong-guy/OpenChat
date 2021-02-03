@@ -12,7 +12,6 @@ import {
   drawerToggle,
   themeToggle,
   setUserInfo,
-  swInit,
 } from "../../Redux/Action/action";
 import { auth } from "../../firebase";
 import styles from "./drawer.module.scss";
@@ -235,7 +234,7 @@ export default function DrawerBox() {
                   variant="contained"
                   style={{
                     borderRadius: "1000px",
-                    padding: "0 5px",
+                    padding: "2px 5px",
                     background: "#FEB401",
                     fontWeight: "500",
                   }}
