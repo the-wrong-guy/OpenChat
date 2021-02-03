@@ -27,9 +27,11 @@ ReactDOM.render(
 serviceWorkerRegistration.register({
   onSuccess: () => {
     store.dispatch({ type: actionTypes.SW_INIT });
+    console.log("1st");
   },
   onUpdate: (registration) => {
     store.dispatch({ type: actionTypes.SW_UPDATE, payload: registration });
+    console.log("1st");
   },
 });
 
