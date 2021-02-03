@@ -229,7 +229,17 @@ export default function DrawerBox() {
               }}
             >
               {isServiceWorkerUpdated ? (
-                <Button onClick={updateServiceWorker} type="small">
+                <Button
+                  variant="contained"
+                  style={{
+                    borderRadius: "1000px",
+                    padding: "0 5px",
+                    background: "#FEB401",
+                    fontWeight: "500",
+                  }}
+                  onClick={updateServiceWorker}
+                  type="small"
+                >
                   Update
                 </Button>
               ) : (
