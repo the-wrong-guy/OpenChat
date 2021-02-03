@@ -31,7 +31,7 @@ serviceWorkerRegistration.register({
   },
   onUpdate: (registration) => {
     store.dispatch({ type: actionTypes.SW_UPDATE, payload: registration });
-    console.log("1st");
+    console.log("2nd");
   },
 });
 
