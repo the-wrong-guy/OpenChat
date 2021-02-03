@@ -12,6 +12,7 @@ import {
   drawerToggle,
   themeToggle,
   setUserInfo,
+  swInit,
 } from "../../Redux/Action/action";
 import { auth } from "../../firebase";
 import styles from "./drawer.module.scss";
@@ -65,8 +66,28 @@ export default function DrawerBox() {
   const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.CONFIG.drawerOpen);
   const isDarkTheme = useSelector((state) => state.CONFIG.darkTheme);
+  const isServiceWorkerUpdated = useSelector(
+    (state) => state.CONFIG.serviceWorkerUpdated
+  );
+  const serviceWorkerRegistration = useSelector(
+    (state) => state.CONFIG.serviceWorkerRegistration
+  );
   const userInfo = useSelector((state) => state.CONFIG.userInfo);
 
+  const updateServiceWorker = () => {
+    const registrationWaiting = serviceWorkerRegistration.waiting;
+
+    if (registrationWaiting) {
+      registrationWaiting.postMessage({ type: "SKIP_WAITING" });
+
+      registrationWaiting.addEventListener("statechange", (e) => {
+        if (e.target.state === "activated") {
+          // eslint-disable-next-line no-undef
+          window.location.reload();
+        }
+      });
+    }
+  };
   const toggleDrawer = () => async (event) => {
     if (
       event.type === "keydown" &&
@@ -195,12 +216,18 @@ export default function DrawerBox() {
                 justifyContent: "center",
               }}
             >
-              <span
-                style={{ color: `${isDarkTheme ? "peachpuff" : "#252525"}` }}
-                className={styles.ver}
-              >
-                Version : 1.0.0
-              </span>
+              {isServiceWorkerUpdated ? (
+                <Button onClick={updateServiceWorker} type="small">
+                  Update
+                </Button>
+              ) : (
+                <span
+                  style={{ color: `${isDarkTheme ? "peachpuff" : "#252525"}` }}
+                  className={styles.ver}
+                >
+                  Version : 1.0.0
+                </span>
+              )}
             </ListItem>
           </div>
 

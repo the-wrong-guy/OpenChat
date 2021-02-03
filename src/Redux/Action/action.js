@@ -13,3 +13,12 @@ export const setUserInfo = (info) => ({
   type: actionTypes.SET_USER_INFO,
   payload: info,
 });
+
+export const swInit = () => ({
+  type: actionTypes.SW_INIT,
+});
+
+export const swUpdate = (reg) => ({
+  type: actionTypes.SW_UPDATE,
+  payload: reg,
+});

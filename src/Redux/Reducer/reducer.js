@@ -4,6 +4,9 @@ const intialState = {
   darkTheme: true,
   drawerOpen: false,
   userInfo: null,
+  serviceWorkerInitialized: false,
+  serviceWorkerUpdated: false,
+  serviceWorkerRegistration: null,
 };
 const CONFIG = (state = intialState, action) => {
   switch (action.type) {
@@ -13,6 +16,17 @@ const CONFIG = (state = intialState, action) => {
       return { ...state, drawerOpen: !state.drawerOpen };
     case actionTypes.SET_USER_INFO:
       return { ...state, userInfo: action.payload };
+    case actionTypes.SW_INIT:
+      return {
+        ...state,
+        serviceWorkerInitialized: !state.serviceWorkerInitialized,
+      };
+    case actionTypes.SW_UPDATE:
+      return {
+        ...state,
+        serviceWorkerUpdated: !state.serviceWorkerUpdated,
+        serviceWorkerRegistration: action.payload,
+      };
     default:
       return state;
   }

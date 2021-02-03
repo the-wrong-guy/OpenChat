@@ -1,11 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import "./index.css";
 import App from "./App";
 import store from "./Redux/store";
+import { swInit, swUpdate } from "./Redux/Action/action";
+
+const dispatch = useDispatch();
 
 ReactDOM.render(
   // eslint-disable-next-line react/jsx-filename-extension
@@ -20,7 +23,14 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-serviceWorkerRegistration.register();
+serviceWorkerRegistration.register({
+  onSuccess: () => {
+    dispatch(swInit());
+  },
+  onUpdate: (registration) => {
+    dispatch(swUpdate(registration));
+  },
+});
 
 // import reportWebVitals from "./reportWebVitals";
 // reportWebVitals(console.log);
