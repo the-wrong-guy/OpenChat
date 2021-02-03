@@ -67,7 +67,6 @@ export default function Main() {
   useEffect(() => {
     if (emptyDiv.current) {
       emptyDiv.current.scrollIntoView({
-        block: "nearest",
         inline: "center",
         behavior: "smooth",
         alignToTop: false,
@@ -198,7 +197,7 @@ export default function Main() {
         component={motion.div}
       >
         {loading ? (
-          <div className={styles.loaderDiv}>
+          <div style={{ width: "100%", height: "100vh", background: "#000" }}>
             <Loader />
           </div>
         ) : (

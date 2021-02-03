@@ -7,6 +7,7 @@ import "./index.css";
 import App from "./App";
 import store from "./Redux/store";
 import { swInit, swUpdate } from "./Redux/Action/action";
+import actionTypes from "./Redux/Action/action.types";
 
 // const dispatch = useDispatch();
 
@@ -25,10 +26,10 @@ ReactDOM.render(
 
 serviceWorkerRegistration.register({
   onSuccess: () => {
-    store.dispatch(swInit());
+    store.dispatch({ type: actionTypes.SW_INIT });
   },
   onUpdate: (registration) => {
-    store.dispatch(swUpdate(registration));
+    store.dispatch({ type: actionTypes.SW_UPDATE, payload: registration });
   },
 });
 
