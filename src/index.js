@@ -8,7 +8,7 @@ import App from "./App";
 import store from "./Redux/store";
 import { swInit, swUpdate } from "./Redux/Action/action";
 
-const dispatch = useDispatch();
+// const dispatch = useDispatch();
 
 ReactDOM.render(
   // eslint-disable-next-line react/jsx-filename-extension
@@ -25,10 +25,10 @@ ReactDOM.render(
 
 serviceWorkerRegistration.register({
   onSuccess: () => {
-    dispatch(swInit());
+    store.dispatch(swInit());
   },
   onUpdate: (registration) => {
-    dispatch(swUpdate(registration));
+    store.dispatch(swUpdate(registration));
   },
 });
 
