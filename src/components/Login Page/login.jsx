@@ -4,7 +4,7 @@ import { Paper, Button } from "@material-ui/core";
 import { motion } from "framer-motion";
 import cx from "classnames";
 import { useHistory } from "react-router-dom";
-import { auth } from "../../firebase";
+import { auth, db, realDB } from "../../firebase";
 import styles from "./login.module.scss";
 import phoneImg from "./images/Untitled_design__15_-removebg-preview.png";
 import coupleChatting from "./images/Untitled_design__14_-removebg-preview.png";
@@ -42,6 +42,10 @@ export default function Login() {
     // eslint-disable-next-line no-shadow
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
+        realDB
+          .ref(`users/${user.uid}`)
+          .set({ userName: user.displayName, displayPic: user.photoURL });
+        console.log(user);
         history.push("/");
         setLoading(false);
       } else {
