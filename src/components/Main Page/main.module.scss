@@ -34,17 +34,18 @@
 }
 
 .messageBox {
-  position: relative;
-  width: 100%;
+  margin: 0 !important;
+  position: relative !important;
+  width: 100% !important;
   height: calc(100vh - 64px) !important;
-  display: flex;
-  justify-content: center;
+  // display: flex;
+  // justify-content: center;
   // background: #eaf5ea;
 }
 
 .innnerContainer {
   position: relative;
-  width: 55vw;
+  // width: 55vw;
 }
 
 .form {
@@ -197,7 +198,7 @@
     height: calc(100vh - 56px) !important;
   }
   .innnerContainer {
-    width: 100vw;
+    // width: 100vw;
   }
 
   .form {

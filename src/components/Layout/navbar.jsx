@@ -8,7 +8,7 @@ import DrawerBox from "./drawer";
 import { drawerToggle } from "../../Redux/Action/action";
 
 // eslint-disable-next-line react/prop-types
-export default function Navbar({ displayName, displayPic }) {
+function Navbar({ displayPic }) {
   const dispatch = useDispatch();
   const isDarkTheme = useSelector((state) => state.CONFIG.darkTheme);
   return (
@@ -51,6 +51,4 @@ export default function Navbar({ displayName, displayPic }) {
   );
 }
 
-// <Button onClick={signOut} variant="contained" size="small">
-// Sign Out
-// </Button>
+export default React.memo(Navbar);

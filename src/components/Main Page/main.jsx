@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import firebase from "firebase";
-import { Paper, Button, IconButton } from "@material-ui/core";
+import { Paper, Button, IconButton, Grid, Hidden } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { PhotoCamera } from "@material-ui/icons";
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -12,9 +12,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import { Offline } from "react-detect-offline";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { auth, db, storage } from "../../firebase";
+import { auth, db, storage, realDB } from "../../firebase";
 import { setUserInfo } from "../../Redux/Action/action";
 import Navbar from "../Layout/navbar";
+import RightNav from "../Right-Side-Nav/rsn";
+import LeftNav from "../Left-Side-Nav/lsn";
 import Message from "../Message/message";
 import styles from "./main.module.scss";
 import Loader from "../Loader/loader";
@@ -47,12 +49,16 @@ export default function Main() {
   // -----------------Setting Up the Dark Theme------------------------//
 
   const dispatch = useDispatch();
+  const selectedGrp = useSelector((state) => state.CONFIG.selectedGrp);
   const [senderMsg, setSenderMsg] = useState("");
   const [senderImg, setSenderImg] = useState(null);
   const [imgPreview, setImgPreview] = useState(null);
   const [uploadLoader, setUplaodLoader] = useState(false);
   // const [query, SetQuery] = useState(null);
-  const messagesRef = db.collection("messages");
+  const messagesRef = db
+    .collection("groups")
+    .doc(selectedGrp)
+    ?.collection("messages");
   const query = messagesRef.orderBy("createdAt", "asc");
   const [messages] = useCollectionData(query, { idField: "id" });
   const [loading, setLoading] = useState(true);
@@ -83,7 +89,6 @@ export default function Main() {
           displayName: user.displayName,
           displayPhoto: user.photoURL,
         });
-        dispatch(setUserInfo(user));
         setLoading(false);
         history.push("/");
       } else {
@@ -95,6 +100,21 @@ export default function Main() {
     return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    // eslint-disable-next-line no-shadow
+    const unsub = auth.onAuthStateChanged((user) => {
+      if (user) {
+        realDB.ref(`users/${user.uid}`).on("value", (snapshot) => {
+          const data = snapshot.val();
+          dispatch(setUserInfo(data));
+          console.log("dispatch");
+          console.log(data);
+        });
+      }
+    });
+    return unsub;
+  }, []);
+
   const sendMessage = async (e) => {
     e.preventDefault();
 
@@ -102,13 +122,17 @@ export default function Main() {
       if (user && (senderMsg !== "" || senderImg !== null)) {
         const { uid, photoURL, displayName } = user;
         if (senderMsg !== "" && senderImg === null) {
-          await db.collection("messages").add({
-            text: senderMsg,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            uid,
-            photoURL,
-            displayName,
-          });
+          await db
+            .collection("groups")
+            .doc(selectedGrp)
+            .collection("messages")
+            .add({
+              text: senderMsg,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              uid,
+              photoURL,
+              displayName,
+            });
           // eslint-disable-next-line no-undef
           new Audio(sendAudio).play();
           setSenderMsg("");
@@ -116,18 +140,22 @@ export default function Main() {
           setUplaodLoader(true);
           const storageRef = storage.ref();
           const fileRef = storageRef.child(
-            `images/${uuidv4()}-${senderImg.name}`
+            `GroupMessageImages/${uuidv4()}-${senderImg.name}`
           );
           await fileRef.put(senderImg);
           setSenderImg(null);
           const fileUrl = await fileRef.getDownloadURL();
-          await db.collection("messages").add({
-            photoMsg: fileUrl,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            uid,
-            photoURL,
-            displayName,
-          });
+          await db
+            .collection("groups")
+            .doc(selectedGrp)
+            .collection("messages")
+            .add({
+              photoMsg: fileUrl,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              uid,
+              photoURL,
+              displayName,
+            });
           // eslint-disable-next-line no-undef
           new Audio(sendAudio).play();
           setUplaodLoader(false);
@@ -137,19 +165,23 @@ export default function Main() {
           setUplaodLoader(true);
           const storageRef = storage.ref();
           const fileRef = storageRef.child(
-            `images/${uuidv4()}-${senderImg.name}`
+            `GroupMessageImages/${uuidv4()}-${senderImg.name}`
           );
           await fileRef.put(senderImg);
           setSenderImg(null);
           const fileUrl = await fileRef.getDownloadURL();
-          await db.collection("messages").add({
-            text: tempTextmsg,
-            photoMsg: fileUrl,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            uid,
-            photoURL,
-            displayName,
-          });
+          await db
+            .collection("groups")
+            .doc(selectedGrp)
+            .collection("messages")
+            .add({
+              text: tempTextmsg,
+              photoMsg: fileUrl,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              uid,
+              photoURL,
+              displayName,
+            });
           setUplaodLoader(false);
           // eslint-disable-next-line no-undef
           new Audio(sendAudio).play();
@@ -202,10 +234,7 @@ export default function Main() {
           </div>
         ) : (
           <div>
-            <Navbar
-              displayName={userDetails.displayName}
-              displayPic={userDetails.displayPhoto}
-            />
+            <Navbar displayPic={userDetails.displayPhoto} />
 
             <Offline>
               <div className={styles.offlineDiv}>
@@ -216,8 +245,20 @@ export default function Main() {
               </div>
             </Offline>
 
-            <div className={styles.messageBox}>
-              <div className={styles.innnerContainer}>
+            <Grid container className={styles.messageBox}>
+              <Hidden only="xs">
+                <Grid style={{ height: "100%" }} item sm={3} md={3}>
+                  <LeftNav />
+                </Grid>
+              </Hidden>
+              <Grid
+                item
+                sm={6}
+                md={6}
+                xs={12}
+                style={{ height: "100%" }}
+                className={styles.innnerContainer}
+              >
                 <main className={styles.main}>
                   {messages &&
                     user &&
@@ -336,8 +377,13 @@ export default function Main() {
                     />
                   </Button>
                 </form>
-              </div>
-            </div>
+              </Grid>
+              <Hidden only="xs">
+                <Grid item sm={3} md={3} style={{ height: "100%" }}>
+                  <RightNav />
+                </Grid>
+              </Hidden>
+            </Grid>
           </div>
         )}
       </Paper>

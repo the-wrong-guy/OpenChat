@@ -1,10 +1,14 @@
+/* eslint-disable no-else-return */
+/* eslint-disable no-useless-return */
+/* eslint-disable vars-on-top */
+/* eslint-disable no-var */
 import React, { useState, useEffect } from "react";
 import firebase from "firebase";
 import { Paper, Button } from "@material-ui/core";
 import { motion } from "framer-motion";
 import cx from "classnames";
 import { useHistory } from "react-router-dom";
-import { auth, db, realDB } from "../../firebase";
+import { auth, realDB, db } from "../../firebase";
 import styles from "./login.module.scss";
 import phoneImg from "./images/Untitled_design__15_-removebg-preview.png";
 import coupleChatting from "./images/Untitled_design__14_-removebg-preview.png";
@@ -12,13 +16,55 @@ import chatIcon from "./images/chatIcon.png";
 import Loader from "../Loader/loader";
 
 export default function Login() {
+  console.log("Rendering");
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const signInWithGoogle = async () => {
     auth.useDeviceLanguage();
     const provider = new firebase.auth.GoogleAuthProvider();
     try {
-      await auth.signInWithPopup(provider).then(() => {
+      await auth.signInWithPopup(provider).then(async () => {
+        if (auth.currentUser) {
+          var user = auth.currentUser;
+          const userRef = realDB.ref(`users/${user.uid}`);
+          userRef.once("value", (snapshot) => {
+            console.log("running through check...");
+            if (snapshot.exists()) {
+              console.log("exists!...exiting---->");
+              return;
+            } else {
+              realDB
+                .ref(`users/${user.uid}`)
+                .set({
+                  userId: user.uid,
+                  displayName: user.displayName,
+                  displayPic: user.photoURL,
+                })
+                .then(() => {
+                  const groupRef = realDB.ref(`users/${user.uid}/joinedGrps`);
+                  groupRef.once("value", (snap) => {
+                    console.log("running through check...");
+                    if (snap.exists()) {
+                      console.log("exists!");
+                      return;
+                    } else {
+                      groupRef.set({ 0: "Alpha" });
+                      db.collection("groups")
+                        .doc("Alpha")
+                        .collection("members")
+                        .doc(user.uid)
+                        .set({
+                          userId: user.uid,
+                          displayName: user.displayName,
+                          displayPic: user.photoURL,
+                          joinedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        });
+                    }
+                  });
+                });
+            }
+          });
+        }
         history.push("/");
       });
     } catch (error) {
@@ -42,10 +88,6 @@ export default function Login() {
     // eslint-disable-next-line no-shadow
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        realDB
-          .ref(`users/${user.uid}`)
-          .set({ userName: user.displayName, displayPic: user.photoURL });
-        console.log(user);
         history.push("/");
         setLoading(false);
       } else {

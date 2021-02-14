@@ -12,6 +12,7 @@ import {
   drawerToggle,
   themeToggle,
   setUserInfo,
+  updateSelectedGrp,
 } from "../../Redux/Action/action";
 import { auth } from "../../firebase";
 import styles from "./drawer.module.scss";
@@ -60,7 +61,8 @@ const pathVariants = {
   },
 };
 
-export default function DrawerBox() {
+function DrawerBox() {
+  console.log("Rendering");
   const history = useHistory();
   const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.CONFIG.drawerOpen);
@@ -106,6 +108,7 @@ export default function DrawerBox() {
       await auth.signOut();
       dispatch(drawerToggle());
       dispatch(setUserInfo(null));
+      dispatch(updateSelectedGrp("Alpha"));
       history.push("/login");
     } catch (error) {
       console.log(error);
@@ -157,7 +160,7 @@ export default function DrawerBox() {
           </ListItem>
           {userInfo && (
             <ListItem className={styles.userInfoItem}>
-              <img src={userInfo.photoURL} alt="User" />
+              <img src={userInfo.displayPic} alt="User" />
               <span
                 style={{
                   color: `${isDarkTheme ? "#FFD200" : "#78c738"}`,
@@ -332,3 +335,5 @@ export default function DrawerBox() {
     </Drawer>
   );
 }
+
+export default React.memo(DrawerBox);
