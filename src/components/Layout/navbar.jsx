@@ -21,7 +21,6 @@ function Navbar({ displayPic }) {
       <Toolbar className={styles.Toolbar}>
         <div className={styles.logoDiv}>
           <img className={styles.logo} src={logo} alt="logo" />
-          <span>Open Chat</span>
         </div>
         <div>
           <IconButton

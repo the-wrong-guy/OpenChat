@@ -1,11 +1,13 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import firebase from "firebase";
-import { Paper, Button, IconButton, Grid, Hidden } from "@material-ui/core";
+import { Paper, Button, IconButton, Grid } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { PhotoCamera } from "@material-ui/icons";
 import CancelIcon from "@material-ui/icons/Cancel";
 import WifiOffIcon from "@material-ui/icons/WifiOff";
+// import GroupsIcon from "@material-ui/icons/GroupWork";
+// import ExploreIcon from "@material-ui/icons/Explore";
 import { useHistory } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,8 +17,6 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { auth, db, storage, realDB } from "../../firebase";
 import { setUserInfo } from "../../Redux/Action/action";
 import Navbar from "../Layout/navbar";
-import RightNav from "../Right-Side-Nav/rsn";
-import LeftNav from "../Left-Side-Nav/lsn";
 import Message from "../Message/message";
 import styles from "./main.module.scss";
 import Loader from "../Loader/loader";
@@ -55,10 +55,7 @@ export default function Main() {
   const [imgPreview, setImgPreview] = useState(null);
   const [uploadLoader, setUplaodLoader] = useState(false);
   // const [query, SetQuery] = useState(null);
-  const messagesRef = db
-    .collection("groups")
-    .doc(selectedGrp)
-    ?.collection("messages");
+  const messagesRef = db.collection("messages");
   const query = messagesRef.orderBy("createdAt", "asc");
   const [messages] = useCollectionData(query, { idField: "id" });
   const [loading, setLoading] = useState(true);
@@ -122,17 +119,13 @@ export default function Main() {
       if (user && (senderMsg !== "" || senderImg !== null)) {
         const { uid, photoURL, displayName } = user;
         if (senderMsg !== "" && senderImg === null) {
-          await db
-            .collection("groups")
-            .doc(selectedGrp)
-            .collection("messages")
-            .add({
-              text: senderMsg,
-              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-              uid,
-              photoURL,
-              displayName,
-            });
+          await db.collection("messages").add({
+            text: senderMsg,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            uid,
+            photoURL,
+            displayName,
+          });
           // eslint-disable-next-line no-undef
           new Audio(sendAudio).play();
           setSenderMsg("");
@@ -145,17 +138,13 @@ export default function Main() {
           await fileRef.put(senderImg);
           setSenderImg(null);
           const fileUrl = await fileRef.getDownloadURL();
-          await db
-            .collection("groups")
-            .doc(selectedGrp)
-            .collection("messages")
-            .add({
-              photoMsg: fileUrl,
-              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-              uid,
-              photoURL,
-              displayName,
-            });
+          await db.collection("messages").add({
+            photoMsg: fileUrl,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            uid,
+            photoURL,
+            displayName,
+          });
           // eslint-disable-next-line no-undef
           new Audio(sendAudio).play();
           setUplaodLoader(false);
@@ -170,18 +159,14 @@ export default function Main() {
           await fileRef.put(senderImg);
           setSenderImg(null);
           const fileUrl = await fileRef.getDownloadURL();
-          await db
-            .collection("groups")
-            .doc(selectedGrp)
-            .collection("messages")
-            .add({
-              text: tempTextmsg,
-              photoMsg: fileUrl,
-              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-              uid,
-              photoURL,
-              displayName,
-            });
+          await db.collection("messages").add({
+            text: tempTextmsg,
+            photoMsg: fileUrl,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            uid,
+            photoURL,
+            displayName,
+          });
           setUplaodLoader(false);
           // eslint-disable-next-line no-undef
           new Audio(sendAudio).play();
@@ -245,12 +230,7 @@ export default function Main() {
               </div>
             </Offline>
 
-            <Grid container className={styles.messageBox}>
-              <Hidden only="xs">
-                <Grid style={{ height: "100%" }} item sm={3} md={3}>
-                  <LeftNav />
-                </Grid>
-              </Hidden>
+            <Grid container className={styles.messageBox} justify="center">
               <Grid
                 item
                 sm={6}
@@ -378,11 +358,6 @@ export default function Main() {
                   </Button>
                 </form>
               </Grid>
-              <Hidden only="xs">
-                <Grid item sm={3} md={3} style={{ height: "100%" }}>
-                  <RightNav />
-                </Grid>
-              </Hidden>
             </Grid>
           </div>
         )}

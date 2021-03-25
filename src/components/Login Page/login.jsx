@@ -16,7 +16,6 @@ import chatIcon from "./images/chatIcon.png";
 import Loader from "../Loader/loader";
 
 export default function Login() {
-  console.log("Rendering");
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const signInWithGoogle = async () => {
@@ -28,40 +27,17 @@ export default function Login() {
           var user = auth.currentUser;
           const userRef = realDB.ref(`users/${user.uid}`);
           userRef.once("value", (snapshot) => {
+            console.log(snapshot.val());
             console.log("running through check...");
             if (snapshot.exists()) {
               console.log("exists!...exiting---->");
               return;
             } else {
-              realDB
-                .ref(`users/${user.uid}`)
-                .set({
-                  userId: user.uid,
-                  displayName: user.displayName,
-                  displayPic: user.photoURL,
-                })
-                .then(() => {
-                  const groupRef = realDB.ref(`users/${user.uid}/joinedGrps`);
-                  groupRef.once("value", (snap) => {
-                    console.log("running through check...");
-                    if (snap.exists()) {
-                      console.log("exists!");
-                      return;
-                    } else {
-                      groupRef.set({ 0: "Alpha" });
-                      db.collection("groups")
-                        .doc("Alpha")
-                        .collection("members")
-                        .doc(user.uid)
-                        .set({
-                          userId: user.uid,
-                          displayName: user.displayName,
-                          displayPic: user.photoURL,
-                          joinedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        });
-                    }
-                  });
-                });
+              realDB.ref(`users/${user.uid}`).set({
+                userId: user.uid,
+                displayName: user.displayName,
+                displayPic: user.photoURL,
+              });
             }
           });
         }

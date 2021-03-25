@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
-import React from "react";
+import React, { useState } from "react";
 import { formatRelative } from "date-fns";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
+import Skeleton from "@material-ui/lab/Skeleton";
 import { auth } from "../../firebase";
 import styles from "./message.module.scss";
 import "./message.scss";
@@ -42,7 +43,14 @@ export default function Message(props) {
   // eslint-disable-next-line react/destructuring-assignment
   // eslint-disable-next-line react/prop-types
   // const [createdTime, setCreatedTime] = useState([]);
+  const [imgLoaded, setImgLoaded] = useState(false);
   const isDarkTheme = useSelector((state) => state.CONFIG.darkTheme);
+  const themeFuncForRectSkeleton = () => {
+    if (isDarkTheme) {
+      return "rgb(41 41 41)";
+    }
+    return "rgb(255 255 255 / 32%)";
+  };
   const {
     text,
     uid,
@@ -99,7 +107,7 @@ export default function Message(props) {
               <motion.div
                 style={{
                   borderColor: `${
-                    isDarkTheme ? "rgb(173, 85, 255)" : "#505050"
+                    isDarkTheme ? "rgb(173, 85, 255)" : "rgb(173 85 255)"
                   }`,
                 }}
                 className={styles.photoMsgDivSend}
@@ -110,13 +118,34 @@ export default function Message(props) {
                   src={photoMsg}
                   alt="message"
                   whileTap={{ scale: 0.9 }}
-                  loading="lazy"
+                  style={{ opacity: `${imgLoaded ? 1 : 0}` }}
+                  onLoad={() => setImgLoaded(true)}
                 />
+                {!imgLoaded && (
+                  <Skeleton
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      background: `${themeFuncForRectSkeleton()}`,
+                      position: "absolute",
+                    }}
+                    animation="wave"
+                    variant="rect"
+                  />
+                )}
               </motion.div>
             )}
           </div>
           <div className={styles.displayPicSend}>
-            <img src={photoURL} alt="display pic" />
+            <img
+              style={{
+                backgroundColor: `${
+                  isDarkTheme ? "rgb(169 169 169)" : "#252525"
+                }`,
+              }}
+              src={photoURL}
+              alt="display pic"
+            />
           </div>
         </motion.div>
       ) : (
@@ -151,7 +180,7 @@ export default function Message(props) {
             {photoMsg && (
               <motion.div
                 style={{
-                  borderColor: `${isDarkTheme ? "#4877f8" : "#505050"}`,
+                  borderColor: `${isDarkTheme ? "#4877f8" : "rgb(173 85 255)"}`,
                   backgroundColor: "#4877f8",
                 }}
                 className={styles.photoMsgDivSend}
@@ -162,8 +191,21 @@ export default function Message(props) {
                   src={photoMsg}
                   alt="message"
                   whileTap={{ scale: 0.9 }}
-                  loading="lazy"
+                  onLoad={() => setImgLoaded(true)}
+                  style={{ opacity: `${imgLoaded ? 1 : 0}` }}
                 />
+                {!imgLoaded && (
+                  <Skeleton
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      background: `${themeFuncForRectSkeleton()}`,
+                      position: "absolute",
+                    }}
+                    animation="wave"
+                    variant="rect"
+                  />
+                )}
               </motion.div>
             )}
           </div>

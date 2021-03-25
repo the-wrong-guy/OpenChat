@@ -12,7 +12,6 @@ import {
   drawerToggle,
   themeToggle,
   setUserInfo,
-  updateSelectedGrp,
 } from "../../Redux/Action/action";
 import { auth } from "../../firebase";
 import styles from "./drawer.module.scss";
@@ -108,7 +107,6 @@ function DrawerBox() {
       await auth.signOut();
       dispatch(drawerToggle());
       dispatch(setUserInfo(null));
-      dispatch(updateSelectedGrp("Alpha"));
       history.push("/login");
     } catch (error) {
       console.log(error);
@@ -124,6 +122,7 @@ function DrawerBox() {
       onClose={toggleDrawer(false)}
       anchor="left"
       open={isOpen}
+      transitionDuration={500}
     >
       <List className={styles.list}>
         <div className={styles.firstDiv}>

@@ -7,7 +7,6 @@ const intialState = {
   serviceWorkerInitialized: false,
   serviceWorkerUpdated: false,
   serviceWorkerRegistration: null,
-  selectedGrp: "Alpha",
 };
 const CONFIG = (state = intialState, action) => {
   switch (action.type) {
@@ -27,12 +26,7 @@ const CONFIG = (state = intialState, action) => {
         ...state,
         serviceWorkerUpdated: !state.serviceWorkerUpdated,
         serviceWorkerRegistration: action.payload,
-      };
-    case actionTypes.UPDATE_SELECTED_GRP:
-      return {
-        ...state,
-        selectedGrp: action.payload,
-      };
+      };    
     default:
       return state;
   }

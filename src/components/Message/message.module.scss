@@ -30,7 +30,7 @@ $height-width-dp: 33px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 10px;
+  gap: 3px;
 }
 
 @mixin displayName {
@@ -135,9 +135,9 @@ $height-width-dp: 33px;
 .photoMsgDivSend {
   overflow: hidden;
   position: relative;
-  min-width: 50px;
+  min-width: 300px;
   max-width: 330px;
-  min-height: 50px;
+  min-height: 300px;
   max-height: 380px;
   display: flex;
   align-items: center;
