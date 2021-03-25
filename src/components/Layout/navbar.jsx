@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Toolbar, IconButton } from "@material-ui/core";
+import { AppBar, Toolbar, IconButton, Avatar } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import styles from "./navbar.module.scss";
@@ -31,14 +31,7 @@ function Navbar({ displayPic }) {
             onClick={() => dispatch(drawerToggle())}
           >
             {displayPic ? (
-              <img
-                className={styles.displayPic}
-                style={{
-                  borderColor: `${isDarkTheme ? "#19e6a1" : "#7AAF50"}`,
-                }}
-                src={displayPic}
-                alt="display pic"
-              />
+              <Avatar alt="display Pic" src={displayPic} />
             ) : (
               <AccountCircle />
             )}
