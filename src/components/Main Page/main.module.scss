@@ -49,60 +49,44 @@
 }
 
 .form {
-  position: relative;
+  position: fixed;
+  bottom: 0;
   width: 100%;
-  height: 68px;
-  padding: 0 10px;
+  height: auto;
+  padding: 5px 10px;
   display: flex;
   align-items: center;
   gap: 10px;
   background: #eaf5ea;
-  // height: 10vh;
-  // position: absolute;
 
-  .imgInput {
+  .textBox {
+    width: 100%;
+    position: relative;
+    border: none;
+    border-radius: 3px;
+    resize: none;
+    font-size: 16px;
+    line-height: 27px;
+    overflow: auto;
+    height: auto;
+    padding: 8px;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    word-break: break-word;
+  }
+
+  .textBox::-webkit-scrollbar {
     display: none;
   }
-
-  .inputCard {
-    display: flex;
-    flex-grow: 1;
-    position: relative;
-    height: 45px;
-    border-radius: 1000px;
-    outline: none;
-    // border: 1px solid gray;
-    input {
-      width: 100%;
-      height: 100%;
-      border-radius: 1000px;
-      outline: none;
-      padding: 10px;
-      padding-left: 20px;
-      border-style: solid;
-      border: none;
-      font-weight: 500;
-      font-size: medium;
-    }
-  }
   .Button {
-    padding: 0 !important;
-    height: 40px;
-    min-width: 40px !important;
-    border-radius: 50% !important;
-    // width: 100px;
-    background: rgb(255, 179, 36) !important;
-    background: rgba($color: #ffffff, $alpha: 0.1);
-    font-weight: 600 !important;
-    outline: none;
-    border-style: solid;
   }
 }
 
 .main {
   position: relative;
-  width: auto;
-  height: calc(100% - 68px);
+  // width: auto;
+  height: calc(100vh - 64px);
   // margin: 10vh 0 10vh;
   overflow-y: scroll;
   display: flex;
@@ -194,41 +178,34 @@
       width: 200px;
     }
   }
-  .messageBox {
-    height: calc(100vh - 56px) !important;
-  }
+  // .messageBox {
+  //   height: calc(100vh - 56px) !important;
+  // }
   .innnerContainer {
     // width: 100vw;
   }
 
-  .form {
-    height: $form-height;
-    .inputCard {
-      height: 42px;
-    }
-    .Button {
-      height: 35px !important;
-      min-width: 35px !important;
-      font-size: 12px !important;
-      img {
-        height: 20px;
-      }
-    }
-  }
+  // .form {
+  //   height: $form-height;
+  //
+  //   .Button {
+  //     height: 35px !important;
+  //     min-width: 35px !important;
+  //     font-size: 12px !important;
+  //     img {
+  //       height: 20px;
+  //     }
+  //   }
+  // }
 
   .main {
-    height: calc(100% - #{$form-height});
+    flex: 1;
+    // height: calc(100% - #{$form-height});
     border-left: none;
   }
 
   .main::-webkit-scrollbar {
     display: none;
-  }
-
-  .inputCard {
-    input {
-      font-size: 14.5px !important;
-    }
   }
 }
 

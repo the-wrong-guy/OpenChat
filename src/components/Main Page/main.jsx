@@ -1,11 +1,14 @@
+/* eslint-disable no-bitwise */
+/* eslint-disable no-param-reassign */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect, useRef } from "react";
 import firebase from "firebase";
-import { Paper, Button, IconButton, Grid } from "@material-ui/core";
+import { Paper, Button, IconButton, useMediaQuery } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { PhotoCamera } from "@material-ui/icons";
 import CancelIcon from "@material-ui/icons/Cancel";
 import WifiOffIcon from "@material-ui/icons/WifiOff";
+import SendIcon from "@material-ui/icons/Send";
 // import GroupsIcon from "@material-ui/icons/GroupWork";
 // import ExploreIcon from "@material-ui/icons/Explore";
 import { useHistory } from "react-router-dom";
@@ -49,14 +52,11 @@ export default function Main() {
   // -----------------Setting Up the Dark Theme------------------------//
 
   const dispatch = useDispatch();
-  const selectedGrp = useSelector((state) => state.CONFIG.selectedGrp);
-  const [senderMsg, setSenderMsg] = useState("");
   const [senderImg, setSenderImg] = useState(null);
   const [imgPreview, setImgPreview] = useState(null);
   const [uploadLoader, setUplaodLoader] = useState(false);
-  // const [query, SetQuery] = useState(null);
   const messagesRef = db.collection("messages");
-  const query = messagesRef.orderBy("createdAt", "asc");
+  const query = messagesRef.orderBy("createdAt", "asc").limit(15);
   const [messages] = useCollectionData(query, { idField: "id" });
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(() => auth.currentUser);
@@ -66,6 +66,38 @@ export default function Main() {
   });
   const history = useHistory();
   const emptyDiv = useRef();
+  const matches = useMediaQuery("(max-width:600px)");
+
+  const [message, setMessage] = useState({
+    text: "",
+    rows: 1,
+    minRows: 1,
+    maxRows: 4,
+  });
+
+  const handleTextboxChange = (event) => {
+    const textareaLineHeight = 27;
+
+    const previousRows = event.target.rows;
+    event.target.rows = message.minRows; // reset number of rows in textarea
+
+    const currentRows = ~~(event.target.scrollHeight / textareaLineHeight);
+
+    if (currentRows === previousRows) {
+      event.target.rows = currentRows;
+    }
+
+    if (currentRows >= message.maxRows) {
+      event.target.rows = message.maxRows;
+      event.target.scrollTop = event.target.scrollHeight;
+    }
+
+    setMessage({
+      ...message,
+      text: event.target.value,
+      rows: currentRows < message.maxRows ? currentRows : message.maxRows,
+    });
+  };
 
   useEffect(() => {
     if (emptyDiv.current) {
@@ -116,11 +148,11 @@ export default function Main() {
     e.preventDefault();
 
     try {
-      if (user && (senderMsg !== "" || senderImg !== null)) {
+      if (user && (message.text !== "" || senderImg !== null)) {
         const { uid, photoURL, displayName } = user;
-        if (senderMsg !== "" && senderImg === null) {
+        if (message.text !== "" && senderImg === null) {
           await db.collection("messages").add({
-            text: senderMsg,
+            text: message.text,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             uid,
             photoURL,
@@ -128,8 +160,12 @@ export default function Main() {
           });
           // eslint-disable-next-line no-undef
           new Audio(sendAudio).play();
-          setSenderMsg("");
-        } else if (senderMsg === "" && senderImg !== null) {
+          setMessage({
+            ...message,
+            text: "",
+            rows: 1,
+          });
+        } else if (message.text === "" && senderImg !== null) {
           setUplaodLoader(true);
           const storageRef = storage.ref();
           const fileRef = storageRef.child(
@@ -148,9 +184,13 @@ export default function Main() {
           // eslint-disable-next-line no-undef
           new Audio(sendAudio).play();
           setUplaodLoader(false);
-        } else if (senderMsg !== "" && senderImg !== null) {
-          const tempTextmsg = senderMsg;
-          setSenderMsg("");
+        } else if (message.text !== "" && senderImg !== null) {
+          const tempTextmsg = message.text;
+          setMessage({
+            ...message,
+            text: "",
+            rows: 1,
+          });
           setUplaodLoader(true);
           const storageRef = storage.ref();
           const fileRef = storageRef.child(
@@ -218,9 +258,8 @@ export default function Main() {
             <Loader />
           </div>
         ) : (
-          <div>
+          <>
             <Navbar displayPic={userDetails.displayPhoto} />
-
             <Offline>
               <div className={styles.offlineDiv}>
                 <div>
@@ -229,137 +268,138 @@ export default function Main() {
                 </div>
               </div>
             </Offline>
-
-            <Grid container className={styles.messageBox} justify="center">
-              <Grid
-                item
-                sm={6}
-                md={6}
-                xs={12}
-                style={{ height: "100%" }}
-                className={styles.innnerContainer}
-              >
-                <main className={styles.main}>
-                  {messages &&
-                    user &&
-                    messages.map((msg) => (
-                      <Message key={msg.id} message={msg} />
-                    ))}
-                  {senderImg && (
-                    <AnimatePresence>
+            <div>
+              <main className={styles.main}>
+                {messages &&
+                  user &&
+                  messages.map((msg) => <Message key={msg.id} message={msg} />)}
+                {senderImg && (
+                  <AnimatePresence>
+                    <motion.div
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        margin: "10px 0",
+                      }}
+                      variants={previewImgVariant}
+                      initial="out"
+                      animate="in"
+                      exit="out"
+                      transition={{
+                        stiffness: 50,
+                        default: { duration: 1 },
+                      }}
+                    >
                       <motion.div
                         style={{
-                          width: "100%",
-                          height: "100%",
-                          display: "flex",
-                          justifyContent: "center",
-                          margin: "10px 0",
+                          borderColor: `${
+                            isDarkTheme ? "rgb(173, 85, 255)" : "#505050"
+                          }`,
                         }}
-                        variants={previewImgVariant}
-                        initial="out"
-                        animate="in"
-                        exit="out"
-                        transition={{
-                          stiffness: 50,
-                          default: { duration: 1 },
-                        }}
+                        className={styles.imgPreviewDivSend}
                       >
-                        <motion.div
-                          style={{
-                            borderColor: `${
-                              isDarkTheme ? "rgb(173, 85, 255)" : "#505050"
-                            }`,
-                          }}
-                          className={styles.imgPreviewDivSend}
-                        >
-                          {!uploadLoader && (
-                            <IconButton
-                              onClick={handleImgCancel}
-                              className={styles.cancelPreviewBtn}
-                            >
-                              <CancelIcon />
-                            </IconButton>
-                          )}
+                        {!uploadLoader && (
+                          <IconButton
+                            onClick={handleImgCancel}
+                            className={styles.cancelPreviewBtn}
+                          >
+                            <CancelIcon />
+                          </IconButton>
+                        )}
 
-                          {uploadLoader ? (
-                            <div className={styles.uploadLoader}>
-                              <img
-                                src="https://s2.svgbox.net/loaders.svg?ic=elastic-spinner&color=000000"
-                                width="32"
-                                height="32"
-                                alt="uplaod loader"
-                              />
-                            </div>
-                          ) : (
-                            <Button
-                              onClick={sendMessage}
-                              className={styles.uploadBtn}
-                              variant="contained"
-                            >
-                              Upload
-                            </Button>
-                          )}
-                          <img
-                            className={styles.imgPreview}
-                            src={imgPreview}
-                            alt="preview"
-                          />
-                        </motion.div>
+                        {uploadLoader ? (
+                          <div className={styles.uploadLoader}>
+                            <img
+                              src="https://s2.svgbox.net/loaders.svg?ic=elastic-spinner&color=000000"
+                              width="32"
+                              height="32"
+                              alt="uplaod loader"
+                            />
+                          </div>
+                        ) : (
+                          <Button
+                            onClick={sendMessage}
+                            className={styles.uploadBtn}
+                            variant="contained"
+                          >
+                            Upload
+                          </Button>
+                        )}
+                        <img
+                          className={styles.imgPreview}
+                          src={imgPreview}
+                          alt="preview"
+                        />
                       </motion.div>
-                    </AnimatePresence>
-                  )}
+                    </motion.div>
+                  </AnimatePresence>
+                )}
 
-                  <span
-                    style={{ position: "relative", width: "100%" }}
-                    ref={emptyDiv}
-                  ></span>
-                </main>
-                <form className={styles.form} onSubmit={sendMessage}>
-                  <Paper elevation={20} className={styles.inputCard}>
-                    <input
-                      name="message"
-                      type="text"
-                      value={senderMsg}
-                      onChange={(e) => setSenderMsg(e.target.value)}
-                      placeholder="Enter your message here"
-                    />
-                  </Paper>
-                  <div>
-                    <input
-                      accept="image/*"
-                      onChange={handleImgChange}
-                      className={styles.imgInput}
-                      id="icon-button-file"
-                      type="file"
-                    />
+                <span
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    marginBottom: "60px",
+                  }}
+                  ref={emptyDiv}
+                ></span>
+              </main>
+              <form className={styles.form} onSubmit={sendMessage}>
+                <Paper
+                  elevation={0}
+                  style={{
+                    flex: "1",
+                    display: "flex",
+                    alignItems: "center",
+                    borderRadius: "20px",
+                    padding: `${matches ? "0 30px" : "0 13px"}`,
+                    transition: "ease-in-out 300ms",
+                  }}
+                >
+                  <textarea
+                    rows={message.rows}
+                    value={message.text}
+                    placeholder="Send something..."
+                    className={styles.textBox}
+                    onChange={(e) => setTimeout(handleTextboxChange(e), 100)}
+                  />
+                </Paper>
+                <div>
+                  <input
+                    accept="image/*"
+                    onChange={handleImgChange}
+                    id="icon-button-file"
+                    type="file"
+                    style={{ display: "none" }}
+                  />
+                  {matches && message.text ? (
+                    ""
+                  ) : (
                     <label htmlFor="icon-button-file">
                       <IconButton
-                        color="primary"
                         aria-label="upload picture"
                         component="span"
-                        style={{ position: "relative" }}
+                        style={{ color: "#4a4a4a" }}
+                        size="small"
                       >
-                        <PhotoCamera
-                          style={{ color: `${senderImg ? "green" : "grey"}` }}
-                        />
+                        <PhotoCamera />
                       </IconButton>
                     </label>
-                  </div>
-                  <Button
-                    className={styles.Button}
-                    variant="contained"
-                    onClick={sendMessage}
-                    type="submit"
-                  >
-                    <img
-                      src="https://img.icons8.com/plasticine/30/000000/paper-plane.png"
-                      alt="button"
-                    />
-                  </Button>
-                </form>
-              </Grid>
-            </Grid>
-          </div>
+                  )}
+                </div>
+                <IconButton
+                  aria-label="send message"
+                  onClick={sendMessage}
+                  type="submit"
+                  style={{ color: "#4a4a4a" }}
+                >
+                  <SendIcon />
+                </IconButton>
+              </form>
+            </div>
+          </>
         )}
       </Paper>
     </ThemeProvider>
