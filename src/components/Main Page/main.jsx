@@ -42,6 +42,7 @@ const previewImgVariant = {
 };
 
 export default function Main() {
+  // -----------------Setting Up the Dark Theme------------------------//
   const isDarkTheme = useSelector((state) => state.CONFIG.darkTheme);
   const palletType = isDarkTheme ? "dark" : "light";
   const darkTheme = createMuiTheme({
@@ -55,15 +56,29 @@ export default function Main() {
   const [senderImg, setSenderImg] = useState(null);
   const [imgPreview, setImgPreview] = useState(null);
   const [uploadLoader, setUplaodLoader] = useState(false);
-  const messagesRef = db.collection("messages");
-  const query = messagesRef.orderBy("createdAt", "asc").limit(15);
-  const [messages] = useCollectionData(query, { idField: "id" });
+  const [messages, setMessages] = useState(null);
+  // const messagesRef = db.collection("messages");
+  // const query = messagesRef.orderBy("createdAt").limit(15);
+  // const [messages] = useCollectionData(query, { idField: "id" });
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(() => auth.currentUser);
   const [userDetails, setUserDetails] = useState({
     displayName: "",
     displayPhoto: null,
   });
+
+  useEffect(() => {
+    const unsub = db
+      .collection("messages")
+      .orderBy("createdAt", "desc")
+      .limit(15)
+      .onSnapshot((snapshot) => {
+        setMessages(
+          snapshot.docs.map((doc) => ({ id: doc.id, msg: doc.data() }))
+        );
+      });
+    return unsub;
+  }, []);
   const history = useHistory();
   const emptyDiv = useRef();
   const matches = useMediaQuery("(max-width:600px)");
@@ -169,7 +184,7 @@ export default function Main() {
           setUplaodLoader(true);
           const storageRef = storage.ref();
           const fileRef = storageRef.child(
-            `GroupMessageImages/${uuidv4()}-${senderImg.name}`
+            `imgMessages/${uuidv4()}-${senderImg.name}`
           );
           await fileRef.put(senderImg);
           setSenderImg(null);
@@ -194,7 +209,7 @@ export default function Main() {
           setUplaodLoader(true);
           const storageRef = storage.ref();
           const fileRef = storageRef.child(
-            `GroupMessageImages/${uuidv4()}-${senderImg.name}`
+            `imgMessages/${uuidv4()}-${senderImg.name}`
           );
           await fileRef.put(senderImg);
           setSenderImg(null);
@@ -272,7 +287,9 @@ export default function Main() {
               <main className={styles.main}>
                 {messages &&
                   user &&
-                  messages.map((msg) => <Message key={msg.id} message={msg} />)}
+                  messages.map(({ id, msg }) => (
+                    <Message key={id} message={msg} />
+                  ))}
                 {senderImg && (
                   <AnimatePresence>
                     <motion.div
@@ -346,7 +363,13 @@ export default function Main() {
                   ref={emptyDiv}
                 ></span>
               </main>
-              <form className={styles.form} onSubmit={sendMessage}>
+              <form
+                className={styles.form}
+                style={{
+                  background: `${isDarkTheme ? "#181818" : "rgb(255 179 36)"}`,
+                }}
+                onSubmit={sendMessage}
+              >
                 <Paper
                   elevation={0}
                   style={{
@@ -354,14 +377,14 @@ export default function Main() {
                     display: "flex",
                     alignItems: "center",
                     borderRadius: "20px",
-                    padding: `${matches ? "0 30px" : "0 13px"}`,
+                    padding: `${matches ? "0 10px" : "0 13px"}`,
                     transition: "ease-in-out 300ms",
                   }}
                 >
                   <textarea
                     rows={message.rows}
                     value={message.text}
-                    placeholder="Send something..."
+                    placeholder="Send a message..."
                     className={styles.textBox}
                     onChange={(e) => setTimeout(handleTextboxChange(e), 100)}
                   />

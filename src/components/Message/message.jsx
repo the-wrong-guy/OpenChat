@@ -140,7 +140,7 @@ export default function Message(props) {
             <img
               style={{
                 backgroundColor: `${
-                  isDarkTheme ? "rgb(169 169 169)" : "#252525"
+                  isDarkTheme ? "rgb(169 169 169)" : "rgb(160 160 160)"
                 }`,
               }}
               src={photoURL}
@@ -158,7 +158,15 @@ export default function Message(props) {
           className={styles.RecieveContainer}
         >
           <div className={styles.displayPic}>
-            <img src={photoURL} alt="display pic" />
+            <img
+              style={{
+                backgroundColor: `${
+                  isDarkTheme ? "rgb(169 169 169)" : "rgb(160 160 160)"
+                }`,
+              }}
+              src={photoURL}
+              alt="display pic"
+            />
           </div>
           <div className={styles.infoDiv}>
             <div>
