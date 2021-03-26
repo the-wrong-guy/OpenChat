@@ -5,7 +5,6 @@ import List from "@material-ui/core/List";
 import { motion } from "framer-motion";
 import { Drawer, IconButton, Button } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
-import InstagramIcon from "@material-ui/icons/Instagram";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import ListItem from "@material-ui/core/ListItem";
 import {
@@ -15,6 +14,7 @@ import {
 } from "../../Redux/Action/action";
 import { auth } from "../../firebase";
 import styles from "./drawer.module.scss";
+import BMClogo from "./bmc-button.webp";
 
 // eslint-disable-next-line react/prop-types
 
@@ -174,7 +174,6 @@ function DrawerBox() {
               </span>
             </ListItem>
           )}
-          <Divider />
           <div style={{ display: "grid", gap: "10px" }}>
             <ListItem
               style={{
@@ -200,30 +199,46 @@ function DrawerBox() {
                 </label>
               </div>
             </ListItem>
-            <ListItem style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ fontSize: "14px" }}>Follow the Dev</span>
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <a
-                  target="_blank"
-                  rel="noreferrer"
-                  href="https://www.instagram.com/________the_wrong_guy_______/"
-                  style={{ textDecoration: "none", outline: "none" }}
-                >
-                  <IconButton>
-                    <InstagramIcon />
-                  </IconButton>
-                </a>
-                <a
-                  target="_blank"
-                  rel="noreferrer"
-                  href="https://github.com/the-wrong-guy/"
-                  style={{ textDecoration: "none", outline: "none" }}
-                >
-                  <IconButton>
-                    <GitHubIcon />
-                  </IconButton>
+            <ListItem
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+                gap: "7px",
+              }}
+            >
+              <span style={{ fontSize: "14px" }}>Support the Dev</span>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "5px",
+                }}
+              >
+                <a href="https://www.buymeacoffee.com/bhargab" target="_">
+                  <img src={BMClogo} alt="buy me a coffee" />
                 </a>
               </div>
+              <div
+                style={{
+                  background: `${isDarkTheme ? "#fff" : "#252525"}`,
+                  height: "1px",
+                  width: "100px",
+                  borderRadius: "100px",
+                }}
+              ></div>
+              <a
+                target="_blank"
+                rel="noreferrer"
+                href="https://github.com/the-wrong-guy/"
+                style={{
+                  textDecoration: "none",
+                  outline: "none",
+                  color: "inherit",
+                }}
+              >
+                <GitHubIcon />
+              </a>
             </ListItem>
             <ListItem
               style={{
@@ -246,12 +261,17 @@ function DrawerBox() {
                   Update
                 </Button>
               ) : (
-                <span
-                  style={{ color: `${isDarkTheme ? "peachpuff" : "#252525"}` }}
-                  className={styles.ver}
-                >
-                  Version : 1.0.0
-                </span>
+                <div style={{ display: "block", textAlign: "center" }}>
+                  <span
+                    style={{
+                      color: `${isDarkTheme ? "peachpuff" : "#252525"}`,
+                    }}
+                    className={styles.ver}
+                  >
+                    {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
+                    Version :{process.env.REACT_APP_VERSION}
+                  </span>
+                </div>
               )}
             </ListItem>
           </div>

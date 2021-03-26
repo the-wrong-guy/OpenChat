@@ -3,7 +3,7 @@ import { AppBar, Toolbar, IconButton, Avatar } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import styles from "./navbar.module.scss";
-import logo from "./logo.png";
+import OpenChat from "./OpenChat.webp";
 import DrawerBox from "./drawer";
 import { drawerToggle } from "../../Redux/Action/action";
 
@@ -20,7 +20,7 @@ function Navbar({ displayPic }) {
     >
       <Toolbar className={styles.Toolbar}>
         <div className={styles.logoDiv}>
-          <img className={styles.logo} src={logo} alt="logo" />
+          <img className={styles.logo} src={OpenChat} alt="OpenChat" />
         </div>
         <div>
           <IconButton
@@ -29,6 +29,7 @@ function Navbar({ displayPic }) {
             aria-haspopup="true"
             color="inherit"
             onClick={() => dispatch(drawerToggle())}
+            size="small"
           >
             {displayPic ? (
               <Avatar alt="display Pic" src={displayPic} />

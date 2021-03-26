@@ -1,5 +1,6 @@
 // for media query of display pic
-$height-width-dp: 33px;
+$height-width-dp-desktop: 35px;
+$height-width-dp-mbl: 30px;
 
 @mixin container {
   position: relative;
@@ -13,15 +14,14 @@ $height-width-dp: 33px;
 @mixin displayPic {
   position: relative;
   img {
-    height: 45px;
-    width: 45px;
+    height: $height-width-dp-desktop;
+    width: $height-width-dp-desktop;
     border-radius: 50% !important;
-    // border: 1px solid #fa2af0;
   }
-  @media screen and (max-width: 650px) {
+  @media screen and (max-width: 600px) {
     img {
-      height: $height-width-dp;
-      width: $height-width-dp;
+      height: $height-width-dp-mbl;
+      width: $height-width-dp-mbl;
     }
   }
 }
@@ -175,7 +175,7 @@ $height-width-dp: 33px;
   @include text();
 }
 
-@media only screen and (max-width: 710px) {
+@media only screen and (max-width: 600px) {
   .textDiv,
   .textDivSend {
     max-width: 290px !important;

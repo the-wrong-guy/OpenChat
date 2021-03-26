@@ -10,9 +10,9 @@ import cx from "classnames";
 import { useHistory } from "react-router-dom";
 import { auth, realDB, db } from "../../firebase";
 import styles from "./login.module.scss";
-import phoneImg from "./images/Untitled_design__15_-removebg-preview.png";
-import coupleChatting from "./images/Untitled_design__14_-removebg-preview.png";
-import chatIcon from "./images/chatIcon.png";
+import OpenChat1 from "./images/OpenChat-1.webp";
+import OpenChat2 from "./images/OpenChat-2.webp";
+import OpenChat3 from "./images/OpenChat-3.webp";
 import Loader from "../Loader/loader";
 
 export default function Login() {
@@ -87,12 +87,8 @@ export default function Login() {
       ) : (
         <>
           <div className={cx(styles.firstSection, styles.section)}>
-            <img
-              className={styles.img1}
-              src={coupleChatting}
-              alt="graphic images"
-            />
-            <img className={styles.img2} src={chatIcon} alt="graphic images" />
+            <img className={styles.img1} src={OpenChat2} alt="graphic images" />
+            <img className={styles.img2} src={OpenChat3} alt="graphic images" />
           </div>
           <div className={cx(styles.secondSection, styles.section)}>
             <Paper elevation={5} className={cx(styles.card, styles.section)}>
@@ -146,7 +142,7 @@ export default function Login() {
           </div>
 
           <div className={cx(styles.thirdSection, styles.section)}>
-            <img src={phoneImg} alt="graphic images" />
+            <img src={OpenChat1} alt="graphic images" />
           </div>
         </>
       )}

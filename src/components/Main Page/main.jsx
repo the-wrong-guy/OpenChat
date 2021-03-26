@@ -16,7 +16,6 @@ import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import { Offline } from "react-detect-offline";
-import { useCollectionData } from "react-firebase-hooks/firestore";
 import { auth, db, storage, realDB } from "../../firebase";
 import { setUserInfo } from "../../Redux/Action/action";
 import Navbar from "../Layout/navbar";
@@ -41,6 +40,11 @@ const previewImgVariant = {
   },
 };
 
+const sendButtonVariants = {
+  open: { x: [0, 100] },
+  closed: { x: [-10, 0] },
+};
+
 export default function Main() {
   // -----------------Setting Up the Dark Theme------------------------//
   const isDarkTheme = useSelector((state) => state.CONFIG.darkTheme);
@@ -57,10 +61,8 @@ export default function Main() {
   const [imgPreview, setImgPreview] = useState(null);
   const [uploadLoader, setUplaodLoader] = useState(false);
   const [messages, setMessages] = useState(null);
-  // const messagesRef = db.collection("messages");
-  // const query = messagesRef.orderBy("createdAt").limit(15);
-  // const [messages] = useCollectionData(query, { idField: "id" });
   const [loading, setLoading] = useState(true);
+  const [aniSendBtn, setAniSendBtn] = useState(false);
   const [user, setUser] = useState(() => auth.currentUser);
   const [userDetails, setUserDetails] = useState({
     displayName: "",
@@ -70,8 +72,8 @@ export default function Main() {
   useEffect(() => {
     const unsub = db
       .collection("messages")
-      .orderBy("createdAt", "desc")
-      .limit(15)
+      .orderBy("createdAt")
+      .limitToLast(15)
       .onSnapshot((snapshot) => {
         setMessages(
           snapshot.docs.map((doc) => ({ id: doc.id, msg: doc.data() }))
@@ -151,8 +153,6 @@ export default function Main() {
         realDB.ref(`users/${user.uid}`).on("value", (snapshot) => {
           const data = snapshot.val();
           dispatch(setUserInfo(data));
-          console.log("dispatch");
-          console.log(data);
         });
       }
     });
@@ -164,6 +164,7 @@ export default function Main() {
 
     try {
       if (user && (message.text !== "" || senderImg !== null)) {
+        setAniSendBtn(true);
         const { uid, photoURL, displayName } = user;
         if (message.text !== "" && senderImg === null) {
           await db.collection("messages").add({
@@ -226,6 +227,7 @@ export default function Main() {
           // eslint-disable-next-line no-undef
           new Audio(sendAudio).play();
         }
+        setTimeout(() => setAniSendBtn(false), 500);
       } else {
         return;
       }
@@ -418,7 +420,17 @@ export default function Main() {
                   type="submit"
                   style={{ color: "#4a4a4a" }}
                 >
-                  <SendIcon />
+                  <motion.div
+                    animate={aniSendBtn ? "open" : "closed"}
+                    variants={sendButtonVariants}
+                    transition={{
+                      duration: 0.5,
+                      ease: "easeInOut",
+                    }}
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <SendIcon />
+                  </motion.div>
                 </IconButton>
               </form>
             </div>
