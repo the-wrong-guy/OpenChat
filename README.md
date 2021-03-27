@@ -33,9 +33,4 @@ Please read [LICENSE](LICENSE.md) for details
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
 
-## Support this Project
 
-<a href='https://www.buymeacoffee.com/bhargab' target='_'>
-<img src='./Screenshots/bmc-button.webp' alt='buy me a coffee' />
-</a> <br/>
-By supporting me you will support the project
