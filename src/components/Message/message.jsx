@@ -3,7 +3,7 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { useState, useEffect } from "react";
 import { formatRelative } from "date-fns";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import Skeleton from "@material-ui/lab/Skeleton";
 import IconButton from "@material-ui/core/IconButton";
@@ -162,7 +162,9 @@ function Message(props) {
                 {match === "sent" ? "You" : displayName}
               </span>
               <span
-                style={{ color: `${isDarkTheme ? "#19e6a1" : "#52AD88"}` }}
+                style={{
+                  color: `${isDarkTheme ? "#19e6a1" : "rgb(152 152 152)"}`,
+                }}
                 className={styles.time}
               >
                 {createdAt && formatDate(new Date(createdAt.seconds * 1000))}
@@ -181,7 +183,7 @@ function Message(props) {
                       isDarkTheme ? "rgb(173, 85, 255)" : "rgb(173 85 255)"
                     }`,
                   }}
-                  className={styles.photoMsgDivSend}
+                  className={styles.photoMsgDivSent}
                 >
                   <motion.img
                     className={styles.photoMsg}
@@ -189,6 +191,7 @@ function Message(props) {
                     alt="message"
                     style={{ opacity: `${imgLoaded ? 1 : 0}` }}
                     onLoad={() => setImgLoaded(true)}
+                    whileTap={{ scale: 0.7 }}
                   />
                   {!imgLoaded && (
                     <Skeleton
@@ -222,15 +225,24 @@ function Message(props) {
                     aria-label="heart"
                     size="small"
                     onClick={handleHeartIconClick}
+                    style={{ width: "21px", height: "21px" }}
                   >
                     {TempLike ? (
-                      <FavoriteIcon
-                        style={{ height: "15px", width: "15px", color: "red" }}
-                      />
+                      <motion.div whileTap={{ scale: 1.3 }}>
+                        <FavoriteIcon
+                          style={{
+                            height: "15px",
+                            width: "15px",
+                            color: "red",
+                          }}
+                        />
+                      </motion.div>
                     ) : (
-                      <FavoriteBorderIcon
-                        style={{ height: "15px", width: "15px" }}
-                      />
+                      <motion.div whileTap={{ scale: 1.3 }}>
+                        <FavoriteBorderIcon
+                          style={{ height: "15px", width: "15px" }}
+                        />
+                      </motion.div>
                     )}
                   </IconButton>
                 </div>
@@ -275,7 +287,9 @@ function Message(props) {
                 {match === "sent" ? "You" : displayName}
               </span>
               <span
-                style={{ color: `${isDarkTheme ? "#19e6a1" : "#52AD88"}` }}
+                style={{
+                  color: `${isDarkTheme ? "#19e6a1" : "rgb(152 152 152)"}`,
+                }}
                 className={styles.time}
               >
                 {createdAt && formatDate(new Date(createdAt.seconds * 1000))}
@@ -295,7 +309,7 @@ function Message(props) {
                     }`,
                     backgroundColor: "#4877f8",
                   }}
-                  className={styles.photoMsgDivSend}
+                  className={styles.photoMsgDivRecieve}
                 >
                   <motion.img
                     className={styles.photoMsg}
@@ -303,6 +317,7 @@ function Message(props) {
                     alt="message"
                     onLoad={() => setImgLoaded(true)}
                     style={{ opacity: `${imgLoaded ? 1 : 0}` }}
+                    whileTap={{ scale: 0.7 }}
                   />
                   {!imgLoaded && (
                     <Skeleton
@@ -335,15 +350,24 @@ function Message(props) {
                     aria-label="heart"
                     size="small"
                     onClick={handleHeartIconClick}
+                    style={{ width: "21px", height: "21px" }}
                   >
                     {TempLike ? (
-                      <FavoriteIcon
-                        style={{ height: "15px", width: "15px", color: "red" }}
-                      />
+                      <motion.div whileTap={{ scale: 1.3 }}>
+                        <FavoriteIcon
+                          style={{
+                            height: "15px",
+                            width: "15px",
+                            color: "red",
+                          }}
+                        />
+                      </motion.div>
                     ) : (
-                      <FavoriteBorderIcon
-                        style={{ height: "15px", width: "15px" }}
-                      />
+                      <motion.div whileTap={{ scale: 1.3 }}>
+                        <FavoriteBorderIcon
+                          style={{ height: "15px", width: "15px" }}
+                        />
+                      </motion.div>
                     )}
                   </IconButton>
                 </div>

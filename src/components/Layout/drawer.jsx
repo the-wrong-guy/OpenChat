@@ -61,7 +61,6 @@ const pathVariants = {
 };
 
 function DrawerBox() {
-  console.log("Rendering");
   const history = useHistory();
   const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.CONFIG.drawerOpen);
@@ -72,7 +71,6 @@ function DrawerBox() {
   const serviceWorkerRegistration = useSelector(
     (state) => state.CONFIG.serviceWorkerRegistration
   );
-  const userInfo = useSelector((state) => state.CONFIG.userInfo);
 
   const updateServiceWorker = () => {
     const registrationWaiting = serviceWorkerRegistration.waiting;
@@ -156,7 +154,7 @@ function DrawerBox() {
                 ></motion.path>
               </motion.svg>
             </IconButton>
-          </ListItem>      
+          </ListItem>
           <div style={{ display: "grid", gap: "10px" }}>
             <ListItem
               style={{
@@ -252,7 +250,7 @@ function DrawerBox() {
                     className={styles.ver}
                   >
                     {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-                    Version :{process.env.REACT_APP_VERSION}
+                    Version: {process.env.REACT_APP_VERSION}
                   </span>
                 </div>
               )}

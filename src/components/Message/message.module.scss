@@ -4,15 +4,20 @@ $height-width-dp-mbl: 30px;
 
 @mixin container {
   position: relative;
-  width: 350px;
+  width: 380px;
   height: 100%;
   display: flex;
   align-items: center;
   margin: 6px 0;
+  @media screen and (max-width: 600px) {
+    width: calc(100% - 44.2px);
+  }
 }
 
 @mixin displayPic {
   position: relative;
+  display: grid;
+  place-items: center;
   img {
     height: $height-width-dp-desktop;
     width: $height-width-dp-desktop;
@@ -31,6 +36,7 @@ $height-width-dp-mbl: 30px;
   flex-direction: column;
   justify-content: center;
   gap: 3px;
+  width: 100%;
 }
 
 @mixin displayName {
@@ -132,11 +138,10 @@ $height-width-dp-mbl: 30px;
   // text-align: right;
 }
 
-.photoMsgDivSend {
+@mixin photoMsgDiv {
   overflow: hidden;
   position: relative;
-  min-width: 250px;
-  max-width: 330px;
+  min-width: 100%;
   min-height: 200px;
   max-height: 380px;
   display: flex;
@@ -146,6 +151,15 @@ $height-width-dp-mbl: 30px;
   border-radius: 7px;
   background: rgb(173, 85, 255);
   // z-index: 10000;
+}
+
+.photoMsgDivSent {
+  @include photoMsgDiv();
+  // margin-left: 44.2px;
+}
+.photoMsgDivRecieve {
+  @include photoMsgDiv();
+  // margin-right: 44.2px;
 }
 
 .photoMsg {

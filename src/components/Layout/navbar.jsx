@@ -21,7 +21,10 @@ function Navbar({ displayPic }) {
       <Toolbar className={styles.Toolbar}>
         <div className={styles.logoDiv}>
           <img className={styles.logo} src={OpenChat} alt="OpenChat" />
+          <span className={styles.header}> OpenChat</span>
         </div>
+        
+
         <div>
           <IconButton
             aria-label="account of current user"

@@ -3,12 +3,12 @@
 /* eslint-disable vars-on-top */
 /* eslint-disable no-var */
 import React, { useState, useEffect } from "react";
-import firebase from "firebase";
+import firebase from "firebase/app";
 import { Paper, Button } from "@material-ui/core";
 import { motion } from "framer-motion";
 import cx from "classnames";
 import { useHistory } from "react-router-dom";
-import { auth, realDB, db } from "../../firebase";
+import { auth, realDB } from "../../firebase";
 import styles from "./login.module.scss";
 import OpenChat1 from "./images/OpenChat-1.webp";
 import OpenChat2 from "./images/OpenChat-2.webp";

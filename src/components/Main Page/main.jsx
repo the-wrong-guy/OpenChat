@@ -2,9 +2,8 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect, useRef } from "react";
-import firebase from "firebase";
+import firebase from "firebase/app";
 import { Paper, Button, IconButton, useMediaQuery } from "@material-ui/core";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { PhotoCamera } from "@material-ui/icons";
 import CancelIcon from "@material-ui/icons/Cancel";
 import WifiOffIcon from "@material-ui/icons/WifiOff";
@@ -16,15 +15,14 @@ import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import { Offline } from "react-detect-offline";
-import { auth, db, storage, realDB } from "../../firebase";
+import { auth, db, storage } from "../../firebase";
 import { setUserInfo } from "../../Redux/Action/action";
 import Navbar from "../Layout/navbar";
 import Message from "../Message/message";
 import styles from "./main.module.scss";
 import Loader from "../Loader/loader";
 
-import sendAudio from "../../Message Sounds/among_us_chat_sound.mp3";
-// import recieveAudio from "../../Message Sounds/facebook_chat_sound.mp3";
+import sendAudio from "../../Message Sounds/send_sound.mp3";
 
 const previewImgVariant = {
   in: {
@@ -49,12 +47,6 @@ function Main() {
   console.log("main Rendering");
   // -----------------Setting Up the Dark Theme------------------------//
   const isDarkTheme = useSelector((state) => state.CONFIG.darkTheme);
-  const palletType = isDarkTheme ? "dark" : "light";
-  const darkTheme = createMuiTheme({
-    palette: {
-      type: palletType,
-    },
-  });
   // -----------------Setting Up the Dark Theme------------------------//
 
   const dispatch = useDispatch();
@@ -127,7 +119,7 @@ function Main() {
         });
       }
     };
-    unsub()
+    unsub();
     return unsub;
   }, [messages]);
 
@@ -254,183 +246,181 @@ function Main() {
   };
 
   return (
-    <ThemeProvider theme={darkTheme}>
-      <Paper
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ when: "beforeChildren", staggerChildren: 0.4 }}
-        className={styles.container}
-        component={motion.div}
-      >
-        {loading ? (
-          <div style={{ width: "100%", height: "100vh", background: "#000" }}>
-            <Loader />
-          </div>
-        ) : (
-          <>
-            <Navbar displayPic={userDetails.displayPhoto} />
-            <Offline>
-              <div className={styles.offlineDiv}>
-                <div>
-                  <span>You&apos;re Offline</span>
-                  <WifiOffIcon />
-                </div>
+    <Paper
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ when: "beforeChildren", staggerChildren: 0.4 }}
+      className={styles.container}
+      component={motion.div}
+    >
+      {loading ? (
+        <div style={{ width: "100%", height: "100vh", background: "#000" }}>
+          <Loader />
+        </div>
+      ) : (
+        <>
+          <Navbar displayPic={userDetails.displayPhoto} />
+          <Offline>
+            <div className={styles.offlineDiv}>
+              <div>
+                <span>You&apos;re Offline</span>
+                <WifiOffIcon />
               </div>
-            </Offline>
-            <div>
-              <main className={styles.main}>
-                {messages &&
-                  user &&
-                  messages.map(({ id, msg }) => (
-                    <Message key={id} msgId={id} message={msg} />
-                  ))}
-                {senderImg && (
-                  <AnimatePresence>
+            </div>
+          </Offline>
+          <div>
+            <main className={styles.main}>
+              {messages &&
+                user &&
+                messages.map(({ id, msg }) => (
+                  <Message key={id} msgId={id} message={msg} />
+                ))}
+              {senderImg && (
+                <AnimatePresence>
+                  <motion.div
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      margin: "10px 0",
+                    }}
+                    variants={previewImgVariant}
+                    initial="out"
+                    animate="in"
+                    exit="out"
+                    transition={{
+                      stiffness: 50,
+                      default: { duration: 1 },
+                    }}
+                  >
                     <motion.div
                       style={{
-                        width: "100%",
-                        height: "100%",
-                        display: "flex",
-                        justifyContent: "center",
-                        margin: "10px 0",
+                        borderColor: `${
+                          isDarkTheme ? "rgb(173, 85, 255)" : "#505050"
+                        }`,
                       }}
-                      variants={previewImgVariant}
-                      initial="out"
-                      animate="in"
-                      exit="out"
-                      transition={{
-                        stiffness: 50,
-                        default: { duration: 1 },
-                      }}
+                      className={styles.imgPreviewDivSend}
                     >
-                      <motion.div
-                        style={{
-                          borderColor: `${
-                            isDarkTheme ? "rgb(173, 85, 255)" : "#505050"
-                          }`,
-                        }}
-                        className={styles.imgPreviewDivSend}
-                      >
-                        {!uploadLoader && (
-                          <IconButton
-                            onClick={handleImgCancel}
-                            className={styles.cancelPreviewBtn}
-                          >
-                            <CancelIcon />
-                          </IconButton>
-                        )}
+                      {!uploadLoader && (
+                        <IconButton
+                          onClick={handleImgCancel}
+                          className={styles.cancelPreviewBtn}
+                        >
+                          <CancelIcon />
+                        </IconButton>
+                      )}
 
-                        {uploadLoader ? (
-                          <div className={styles.uploadLoader}>
-                            <img
-                              src="https://s2.svgbox.net/loaders.svg?ic=elastic-spinner&color=000000"
-                              width="32"
-                              height="32"
-                              alt="uplaod loader"
-                            />
-                          </div>
-                        ) : (
-                          <Button
-                            onClick={sendMessage}
-                            className={styles.uploadBtn}
-                            variant="contained"
-                          >
-                            Upload
-                          </Button>
-                        )}
-                        <img
-                          className={styles.imgPreview}
-                          src={imgPreview}
-                          alt="preview"
-                        />
-                      </motion.div>
+                      {uploadLoader ? (
+                        <div className={styles.uploadLoader}>
+                          <img
+                            src="https://s2.svgbox.net/loaders.svg?ic=elastic-spinner&color=000000"
+                            width="32"
+                            height="32"
+                            alt="uplaod loader"
+                          />
+                        </div>
+                      ) : (
+                        <Button
+                          onClick={sendMessage}
+                          className={styles.uploadBtn}
+                          variant="contained"
+                        >
+                          Upload
+                        </Button>
+                      )}
+                      <img
+                        className={styles.imgPreview}
+                        src={imgPreview}
+                        alt="preview"
+                      />
                     </motion.div>
-                  </AnimatePresence>
-                )}
-
-                <span
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    marginBottom: "60px",
-                  }}
-                  ref={emptyDiv}
-                ></span>
-              </main>
-              <form
-                className={styles.form}
-                style={{
-                  background: `${isDarkTheme ? "#181818" : "rgb(255 179 36)"}`,
-                }}
-                onSubmit={sendMessage}
-              >
-                <Paper
-                  elevation={0}
-                  style={{
-                    flex: "1",
-                    display: "flex",
-                    alignItems: "center",
-                    borderRadius: "20px",
-                    padding: `${matches ? "0 10px" : "0 13px"}`,
-                    transition: "ease-in-out 300ms",
-                  }}
-                >
-                  <textarea
-                    rows={message.rows}
-                    value={message.text}
-                    placeholder="Send a message..."
-                    className={styles.textBox}
-                    onChange={handleTextboxChange}
-                  />
-                </Paper>
-                <div>
-                  <input
-                    accept="image/*"
-                    onChange={handleImgChange}
-                    id="icon-button-file"
-                    type="file"
-                    style={{ display: "none" }}
-                  />
-                  {matches && message.text ? (
-                    ""
-                  ) : (
-                    <label htmlFor="icon-button-file">
-                      <IconButton
-                        aria-label="upload picture"
-                        component="span"
-                        style={{ color: "#4a4a4a" }}
-                        size="small"
-                      >
-                        <PhotoCamera />
-                      </IconButton>
-                    </label>
-                  )}
-                </div>
-                <IconButton
-                  aria-label="send message"
-                  onClick={sendMessage}
-                  type="submit"
-                  style={{ color: "#4a4a4a" }}
-                >
-                  <motion.div
-                    animate={aniSendBtn ? "open" : "closed"}
-                    variants={sendButtonVariants}
-                    transition={{
-                      duration: 0.5,
-                      ease: "easeInOut",
-                    }}
-                    style={{ display: "flex", alignItems: "center" }}
-                  >
-                    <SendIcon />
                   </motion.div>
-                </IconButton>
-              </form>
-            </div>
-          </>
-        )}
-      </Paper>
-    </ThemeProvider>
+                </AnimatePresence>
+              )}
+
+              <span
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  marginBottom: "60px",
+                }}
+                ref={emptyDiv}
+              ></span>
+            </main>
+            <form
+              className={styles.form}
+              style={{
+                background: `${isDarkTheme ? "#181818" : "rgb(255 179 36)"}`,
+              }}
+              onSubmit={sendMessage}
+            >
+              <Paper
+                elevation={0}
+                style={{
+                  flex: "1",
+                  display: "flex",
+                  alignItems: "center",
+                  borderRadius: "20px",
+                  padding: `${matches ? "0 10px" : "0 13px"}`,
+                  transition: "ease-in-out 300ms",
+                }}
+              >
+                <textarea
+                  rows={message.rows}
+                  value={message.text}
+                  placeholder="Send a message..."
+                  className={styles.textBox}
+                  onChange={handleTextboxChange}
+                />
+              </Paper>
+              <div>
+                <input
+                  accept="image/*"
+                  onChange={handleImgChange}
+                  id="icon-button-file"
+                  type="file"
+                  style={{ display: "none" }}
+                />
+                {matches && message.text ? (
+                  ""
+                ) : (
+                  <label htmlFor="icon-button-file">
+                    <IconButton
+                      aria-label="upload picture"
+                      component="span"
+                      style={{ color: "#4a4a4a" }}
+                      size="small"
+                    >
+                      <PhotoCamera />
+                    </IconButton>
+                  </label>
+                )}
+              </div>
+              <IconButton
+                aria-label="send message"
+                onClick={sendMessage}
+                type="submit"
+                style={{ color: "#4a4a4a" }}
+              >
+                <motion.div
+                  animate={aniSendBtn ? "open" : "closed"}
+                  variants={sendButtonVariants}
+                  transition={{
+                    duration: 0.5,
+                    ease: "easeInOut",
+                  }}
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <SendIcon />
+                </motion.div>
+              </IconButton>
+            </form>
+          </div>
+        </>
+      )}
+    </Paper>
   );
 }
 
