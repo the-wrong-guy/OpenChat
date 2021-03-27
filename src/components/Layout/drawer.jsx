@@ -250,14 +250,12 @@ function DrawerBox() {
                     className={styles.ver}
                   >
                     {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-                    Version: {process.env.REACT_APP_VERSION}
+                    Version: 1.1.1
                   </span>
                 </div>
               )}
             </ListItem>
           </div>
-
-          <Divider />
         </div>
         <div className={styles.secondDiv}>
           <ListItem
