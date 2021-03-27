@@ -1,11 +1,16 @@
+/* eslint-disable no-useless-return */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { formatRelative } from "date-fns";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import Skeleton from "@material-ui/lab/Skeleton";
-import { auth } from "../../firebase";
+import IconButton from "@material-ui/core/IconButton";
+// Icons
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import { auth, db } from "../../firebase";
 import styles from "./message.module.scss";
 import "./message.scss";
 
@@ -39,12 +44,15 @@ const Transition = {
   staggerChildren: 0.5,
   velocity: 2,
 };
-export default function Message(props) {
+function Message(props) {
   // eslint-disable-next-line react/destructuring-assignment
   // eslint-disable-next-line react/prop-types
   // const [createdTime, setCreatedTime] = useState([]);
   const [imgLoaded, setImgLoaded] = useState(false);
   const isDarkTheme = useSelector((state) => state.CONFIG.darkTheme);
+  const user = useSelector((state) => state.CONFIG.userInfo);
+  const [likes, setLikes] = useState(null);
+  const [TempLike, setTempLike] = useState(false);
   const themeFuncForRectSkeleton = () => {
     if (isDarkTheme) {
       return "rgb(41 41 41)";
@@ -59,6 +67,68 @@ export default function Message(props) {
     displayName,
     photoMsg,
   } = props.message;
+  const { msgId } = props;
+
+  useEffect(() => {
+    const unsub = () => {
+      if (msgId) {
+        db.collection("messages")
+          .doc(msgId)
+          .collection("likesCounter")
+          .where("likeActive", "==", true)
+          .onSnapshot((snapshot) => {
+            if (snapshot.docs.length); // well the greater the number of docs the greater will the number of reads, maybe i should find a efficent way to handle this
+            // eslint-disable-next-line no-lone-blocks
+            {
+              setLikes(snapshot.docs.length);
+            }
+          });
+      }
+    };
+    unsub();
+    return unsub;
+  }, []);
+
+  useEffect(() => {
+    function unsub() {
+      if (user && msgId) {
+        db.collection("messages")
+          .doc(msgId)
+          .collection("likesCounter")
+          .doc(user.uid)
+          .get()
+          .then((docSnapshot) => {
+            if (docSnapshot.exists) {
+              if (docSnapshot.data().likeActive) {
+                setTempLike(docSnapshot.data().likeActive);
+              }
+            }
+          });
+      }
+    }
+    unsub();
+    return unsub;
+  }, []);
+
+  const handleHeartIconClick = () => {
+    setTempLike(!TempLike);
+    setTimeout(() => {
+      if (user) {
+        try {
+          db.collection("messages")
+            .doc(msgId)
+            .collection("likesCounter")
+            .doc(user.uid)
+            .set({
+              likeActive: !TempLike,
+            });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }, 300);
+  };
+
   const formatDate = (date) => {
     let formattedDate = "";
     if (date) {
@@ -104,36 +174,67 @@ export default function Message(props) {
               </div>
             )}
             {photoMsg && (
-              <motion.div
-                style={{
-                  borderColor: `${
-                    isDarkTheme ? "rgb(173, 85, 255)" : "rgb(173 85 255)"
-                  }`,
-                }}
-                className={styles.photoMsgDivSend}
-                whileTap={{ width: "85vw", height: "100vh" }}
-              >
-                <motion.img
-                  className={styles.photoMsg}
-                  src={photoMsg}
-                  alt="message"
-                  whileTap={{ scale: 0.9 }}
-                  style={{ opacity: `${imgLoaded ? 1 : 0}` }}
-                  onLoad={() => setImgLoaded(true)}
-                />
-                {!imgLoaded && (
-                  <Skeleton
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      background: `${themeFuncForRectSkeleton()}`,
-                      position: "absolute",
-                    }}
-                    animation="wave"
-                    variant="rect"
+              <>
+                <motion.div
+                  style={{
+                    borderColor: `${
+                      isDarkTheme ? "rgb(173, 85, 255)" : "rgb(173 85 255)"
+                    }`,
+                  }}
+                  className={styles.photoMsgDivSend}
+                >
+                  <motion.img
+                    className={styles.photoMsg}
+                    src={photoMsg}
+                    alt="message"
+                    style={{ opacity: `${imgLoaded ? 1 : 0}` }}
+                    onLoad={() => setImgLoaded(true)}
                   />
-                )}
-              </motion.div>
+                  {!imgLoaded && (
+                    <Skeleton
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        background: `${themeFuncForRectSkeleton()}`,
+                        position: "absolute",
+                      }}
+                      animation="wave"
+                      variant="rect"
+                    />
+                  )}
+                </motion.div>
+
+                <div
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <span style={{ fontSize: "12px" }}>
+                    {likes || 0}
+                    &nbsp;
+                    {likes === 1 ? "like" : "likes"}
+                  </span>
+                  <IconButton
+                    aria-label="heart"
+                    size="small"
+                    onClick={handleHeartIconClick}
+                  >
+                    {TempLike ? (
+                      <FavoriteIcon
+                        style={{ height: "15px", width: "15px", color: "red" }}
+                      />
+                    ) : (
+                      <FavoriteBorderIcon
+                        style={{ height: "15px", width: "15px" }}
+                      />
+                    )}
+                  </IconButton>
+                </div>
+              </>
             )}
           </div>
           <div className={styles.displayPicSend}>
@@ -186,35 +287,67 @@ export default function Message(props) {
               </div>
             )}
             {photoMsg && (
-              <motion.div
-                style={{
-                  borderColor: `${isDarkTheme ? "#4877f8" : "rgb(173 85 255)"}`,
-                  backgroundColor: "#4877f8",
-                }}
-                className={styles.photoMsgDivSend}
-                whileTap={{ width: "85vw", height: "100vh" }}
-              >
-                <motion.img
-                  className={styles.photoMsg}
-                  src={photoMsg}
-                  alt="message"
-                  whileTap={{ scale: 0.9 }}
-                  onLoad={() => setImgLoaded(true)}
-                  style={{ opacity: `${imgLoaded ? 1 : 0}` }}
-                />
-                {!imgLoaded && (
-                  <Skeleton
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      background: `${themeFuncForRectSkeleton()}`,
-                      position: "absolute",
-                    }}
-                    animation="wave"
-                    variant="rect"
+              <>
+                <motion.div
+                  style={{
+                    borderColor: `${
+                      isDarkTheme ? "#4877f8" : "rgb(173 85 255)"
+                    }`,
+                    backgroundColor: "#4877f8",
+                  }}
+                  className={styles.photoMsgDivSend}
+                >
+                  <motion.img
+                    className={styles.photoMsg}
+                    src={photoMsg}
+                    alt="message"
+                    onLoad={() => setImgLoaded(true)}
+                    style={{ opacity: `${imgLoaded ? 1 : 0}` }}
                   />
-                )}
-              </motion.div>
+                  {!imgLoaded && (
+                    <Skeleton
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        background: `${themeFuncForRectSkeleton()}`,
+                        position: "absolute",
+                      }}
+                      animation="wave"
+                      variant="rect"
+                    />
+                  )}
+                </motion.div>
+                <div
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <span style={{ fontSize: "12px" }}>
+                    {likes || 0}
+                    &nbsp;
+                    {likes === 1 ? "like" : "likes"}
+                  </span>
+                  <IconButton
+                    aria-label="heart"
+                    size="small"
+                    onClick={handleHeartIconClick}
+                  >
+                    {TempLike ? (
+                      <FavoriteIcon
+                        style={{ height: "15px", width: "15px", color: "red" }}
+                      />
+                    ) : (
+                      <FavoriteBorderIcon
+                        style={{ height: "15px", width: "15px" }}
+                      />
+                    )}
+                  </IconButton>
+                </div>
+              </>
             )}
           </div>
         </motion.div>
@@ -224,3 +357,5 @@ export default function Message(props) {
 }
 
 // moment(createdAt.toDate()).fromNow()
+
+export default React.memo(Message);

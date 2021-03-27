@@ -26,7 +26,7 @@ const CONFIG = (state = intialState, action) => {
         ...state,
         serviceWorkerUpdated: !state.serviceWorkerUpdated,
         serviceWorkerRegistration: action.payload,
-      };    
+      };
     default:
       return state;
   }

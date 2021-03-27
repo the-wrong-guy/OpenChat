@@ -45,7 +45,8 @@ const sendButtonVariants = {
   closed: { x: [-10, 0] },
 };
 
-export default function Main() {
+function Main() {
+  console.log("main Rendering");
   // -----------------Setting Up the Dark Theme------------------------//
   const isDarkTheme = useSelector((state) => state.CONFIG.darkTheme);
   const palletType = isDarkTheme ? "dark" : "light";
@@ -117,13 +118,17 @@ export default function Main() {
   };
 
   useEffect(() => {
-    if (emptyDiv.current) {
-      emptyDiv.current.scrollIntoView({
-        inline: "center",
-        behavior: "smooth",
-        alignToTop: false,
-      });
-    }
+    const unsub = () => {
+      if (emptyDiv.current) {
+        emptyDiv.current.scrollIntoView({
+          inline: "center",
+          behavior: "smooth",
+          alignToTop: false,
+        });
+      }
+    };
+    unsub()
+    return unsub;
   }, [messages]);
 
   useEffect(async () => {
@@ -131,6 +136,7 @@ export default function Main() {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setUser(user);
+        dispatch(setUserInfo(user));
         setUserDetails({
           displayName: user.displayName,
           displayPhoto: user.photoURL,
@@ -144,19 +150,6 @@ export default function Main() {
     });
 
     return unsubscribe;
-  }, []);
-
-  useEffect(() => {
-    // eslint-disable-next-line no-shadow
-    const unsub = auth.onAuthStateChanged((user) => {
-      if (user) {
-        realDB.ref(`users/${user.uid}`).on("value", (snapshot) => {
-          const data = snapshot.val();
-          dispatch(setUserInfo(data));
-        });
-      }
-    });
-    return unsub;
   }, []);
 
   const sendMessage = async (e) => {
@@ -290,7 +283,7 @@ export default function Main() {
                 {messages &&
                   user &&
                   messages.map(({ id, msg }) => (
-                    <Message key={id} message={msg} />
+                    <Message key={id} msgId={id} message={msg} />
                   ))}
                 {senderImg && (
                   <AnimatePresence>
@@ -388,7 +381,7 @@ export default function Main() {
                     value={message.text}
                     placeholder="Send a message..."
                     className={styles.textBox}
-                    onChange={(e) => setTimeout(handleTextboxChange(e), 100)}
+                    onChange={handleTextboxChange}
                   />
                 </Paper>
                 <div>
@@ -440,3 +433,5 @@ export default function Main() {
     </ThemeProvider>
   );
 }
+
+export default React.memo(Main);

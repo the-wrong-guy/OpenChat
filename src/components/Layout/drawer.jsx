@@ -156,24 +156,7 @@ function DrawerBox() {
                 ></motion.path>
               </motion.svg>
             </IconButton>
-          </ListItem>
-          {userInfo && (
-            <ListItem className={styles.userInfoItem}>
-              <img src={userInfo.displayPic} alt="User" />
-              <span
-                style={{
-                  color: `${isDarkTheme ? "#FFD200" : "#78c738"}`,
-                  background: `${isDarkTheme ? "#617B9E" : "#7D7F82"}`,
-                  borderRadius: "100px",
-                  lineHeight: "30px",
-                  padding: "0 7px",
-                  fontSize: "15px",
-                }}
-              >
-                {userInfo.displayName}
-              </span>
-            </ListItem>
-          )}
+          </ListItem>      
           <div style={{ display: "grid", gap: "10px" }}>
             <ListItem
               style={{

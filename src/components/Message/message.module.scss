@@ -135,9 +135,9 @@ $height-width-dp-mbl: 30px;
 .photoMsgDivSend {
   overflow: hidden;
   position: relative;
-  min-width: 300px;
+  min-width: 250px;
   max-width: 330px;
-  min-height: 300px;
+  min-height: 200px;
   max-height: 380px;
   display: flex;
   align-items: center;
@@ -145,7 +145,7 @@ $height-width-dp-mbl: 30px;
   border: 3px solid rgb(168, 168, 167);
   border-radius: 7px;
   background: rgb(173, 85, 255);
-  z-index: 10000;
+  // z-index: 10000;
 }
 
 .photoMsg {
