@@ -3,6 +3,7 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { useState, useEffect } from "react";
 import { formatRelative } from "date-fns";
+import Linkify from "linkifyjs/react";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import Skeleton from "@material-ui/lab/Skeleton";
@@ -172,7 +173,9 @@ function Message(props) {
             </div>
             {text && (
               <div className={styles.textDivSend}>
-                <span className={styles.textSend}>{text}</span>
+                <span className={styles.textSend}>
+                  <Linkify>{text}</Linkify>
+                </span>
               </div>
             )}
             {photoMsg && (
@@ -297,7 +300,9 @@ function Message(props) {
             </div>
             {text && (
               <div className={styles.textDiv}>
-                <span className={styles.text}>{text}</span>
+                <span className={styles.text}>
+                  <Linkify>{text}</Linkify>
+                </span>
               </div>
             )}
             {photoMsg && (
