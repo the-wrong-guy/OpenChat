@@ -1,19 +1,19 @@
 /* eslint-disable no-useless-return */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
-import React, { useState, useEffect } from "react";
-import { formatRelative } from "date-fns";
-import Linkify from "linkifyjs/react";
-import { useSelector } from "react-redux";
-import { motion } from "framer-motion";
-import Skeleton from "@material-ui/lab/Skeleton";
-import IconButton from "@material-ui/core/IconButton";
+import React, { useState, useEffect } from 'react';
+import { formatRelative } from 'date-fns';
+import Linkify from 'linkify-react';
+import { useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
+import Skeleton from '@material-ui/lab/Skeleton';
+import IconButton from '@material-ui/core/IconButton';
 // Icons
-import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import { auth, db } from "../../firebase";
-import styles from "./message.module.scss";
-import "./message.scss";
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import { auth, db } from '../../firebase';
+import styles from './message.module.scss';
+import './message.scss';
 
 const VariantRecieve = {
   in: {
@@ -22,26 +22,26 @@ const VariantRecieve = {
   },
   out: {
     opacity: 0,
-    x: "-100%",
+    x: '-100%',
   },
 };
 
 const VariantSent = {
   in: {
     opacity: 1,
-    x: "0%",
+    x: '0%',
   },
   out: {
     opacity: 0,
-    x: "100%",
+    x: '100%',
   },
 };
 
 const Transition = {
-  type: "spring",
+  type: 'spring',
   stiffness: 70,
   delay: 0.2,
-  when: "beforeChildren",
+  when: 'beforeChildren',
   staggerChildren: 0.5,
   velocity: 2,
 };
@@ -56,27 +56,21 @@ function Message(props) {
   const [TempLike, setTempLike] = useState(false);
   const themeFuncForRectSkeleton = () => {
     if (isDarkTheme) {
-      return "rgb(41 41 41)";
+      return 'rgb(41 41 41)';
     }
-    return "rgb(255 255 255 / 32%)";
+    return 'rgb(255 255 255 / 32%)';
   };
-  const {
-    text,
-    uid,
-    photoURL,
-    createdAt,
-    displayName,
-    photoMsg,
-  } = props.message;
+  const { text, uid, photoURL, createdAt, displayName, photoMsg } =
+    props.message;
   const { msgId } = props;
 
   useEffect(() => {
     const unsub = () => {
       if (msgId) {
-        db.collection("messages")
+        db.collection('messages')
           .doc(msgId)
-          .collection("likesCounter")
-          .where("likeActive", "==", true)
+          .collection('likesCounter')
+          .where('likeActive', '==', true)
           .onSnapshot((snapshot) => {
             if (snapshot.docs.length); // well the greater the number of docs the greater will the number of reads, maybe i should find a efficent way to handle this
             // eslint-disable-next-line no-lone-blocks
@@ -93,9 +87,9 @@ function Message(props) {
   useEffect(() => {
     function unsub() {
       if (user && msgId) {
-        db.collection("messages")
+        db.collection('messages')
           .doc(msgId)
-          .collection("likesCounter")
+          .collection('likesCounter')
           .doc(user.uid)
           .get()
           .then((docSnapshot) => {
@@ -116,9 +110,9 @@ function Message(props) {
     setTimeout(() => {
       if (user) {
         try {
-          db.collection("messages")
+          db.collection('messages')
             .doc(msgId)
-            .collection("likesCounter")
+            .collection('likesCounter')
             .doc(user.uid)
             .set({
               likeActive: !TempLike,
@@ -131,7 +125,7 @@ function Message(props) {
   };
 
   const formatDate = (date) => {
-    let formattedDate = "";
+    let formattedDate = '';
     if (date) {
       // Convert the date in words relative to the current date
       formattedDate = formatRelative(date, new Date());
@@ -141,14 +135,14 @@ function Message(props) {
     }
     return formattedDate;
   };
-  const match = uid === auth.currentUser.uid ? "sent" : "received";
+  const match = uid === auth.currentUser.uid ? 'sent' : 'received';
   return (
     <div
       className={`${
-        match === "sent" ? "outerMostConSend" : "outerMostConRecieve"
+        match === 'sent' ? 'outerMostConSend' : 'outerMostConRecieve'
       }`}
     >
-      {match === "sent" ? (
+      {match === 'sent' ? (
         <motion.div
           initial="out"
           animate="in"
@@ -160,11 +154,11 @@ function Message(props) {
           <div className={styles.infoDivSend}>
             <div>
               <span className={styles.displayNameSend}>
-                {match === "sent" ? "You" : displayName}
+                {match === 'sent' ? 'You' : displayName}
               </span>
               <span
                 style={{
-                  color: `${isDarkTheme ? "#19e6a1" : "rgb(152 152 152)"}`,
+                  color: `${isDarkTheme ? '#19e6a1' : 'rgb(152 152 152)'}`,
                 }}
                 className={styles.time}
               >
@@ -183,7 +177,7 @@ function Message(props) {
                 <motion.div
                   style={{
                     borderColor: `${
-                      isDarkTheme ? "rgb(173, 85, 255)" : "rgb(173 85 255)"
+                      isDarkTheme ? 'rgb(173, 85, 255)' : 'rgb(173 85 255)'
                     }`,
                   }}
                   className={styles.photoMsgDivSent}
@@ -199,10 +193,10 @@ function Message(props) {
                   {!imgLoaded && (
                     <Skeleton
                       style={{
-                        width: "100%",
-                        height: "100%",
+                        width: '100%',
+                        height: '100%',
                         background: `${themeFuncForRectSkeleton()}`,
-                        position: "absolute",
+                        position: 'absolute',
                       }}
                       animation="wave"
                       variant="rect"
@@ -212,38 +206,38 @@ function Message(props) {
 
                 <div
                   style={{
-                    position: "relative",
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
+                    position: 'relative',
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}
                 >
-                  <span style={{ fontSize: "12px" }}>
+                  <span style={{ fontSize: '12px' }}>
                     {likes || 0}
                     &nbsp;
-                    {likes === 1 ? "like" : "likes"}
+                    {likes === 1 ? 'like' : 'likes'}
                   </span>
                   <IconButton
                     aria-label="heart"
                     size="small"
                     onClick={handleHeartIconClick}
-                    style={{ width: "21px", height: "21px" }}
+                    style={{ width: '21px', height: '21px' }}
                   >
                     {TempLike ? (
                       <motion.div whileTap={{ scale: 1.3 }}>
                         <FavoriteIcon
                           style={{
-                            height: "15px",
-                            width: "15px",
-                            color: "red",
+                            height: '15px',
+                            width: '15px',
+                            color: 'red',
                           }}
                         />
                       </motion.div>
                     ) : (
                       <motion.div whileTap={{ scale: 1.3 }}>
                         <FavoriteBorderIcon
-                          style={{ height: "15px", width: "15px" }}
+                          style={{ height: '15px', width: '15px' }}
                         />
                       </motion.div>
                     )}
@@ -256,7 +250,7 @@ function Message(props) {
             <img
               style={{
                 backgroundColor: `${
-                  isDarkTheme ? "rgb(169 169 169)" : "rgb(160 160 160)"
+                  isDarkTheme ? 'rgb(169 169 169)' : 'rgb(160 160 160)'
                 }`,
               }}
               src={photoURL}
@@ -277,7 +271,7 @@ function Message(props) {
             <img
               style={{
                 backgroundColor: `${
-                  isDarkTheme ? "rgb(169 169 169)" : "rgb(160 160 160)"
+                  isDarkTheme ? 'rgb(169 169 169)' : 'rgb(160 160 160)'
                 }`,
               }}
               src={photoURL}
@@ -287,11 +281,11 @@ function Message(props) {
           <div className={styles.infoDiv}>
             <div>
               <span className={styles.displayName}>
-                {match === "sent" ? "You" : displayName}
+                {match === 'sent' ? 'You' : displayName}
               </span>
               <span
                 style={{
-                  color: `${isDarkTheme ? "#19e6a1" : "rgb(152 152 152)"}`,
+                  color: `${isDarkTheme ? '#19e6a1' : 'rgb(152 152 152)'}`,
                 }}
                 className={styles.time}
               >
@@ -310,9 +304,9 @@ function Message(props) {
                 <motion.div
                   style={{
                     borderColor: `${
-                      isDarkTheme ? "#4877f8" : "rgb(173 85 255)"
+                      isDarkTheme ? '#4877f8' : 'rgb(173 85 255)'
                     }`,
-                    backgroundColor: "#4877f8",
+                    backgroundColor: '#4877f8',
                   }}
                   className={styles.photoMsgDivRecieve}
                 >
@@ -327,10 +321,10 @@ function Message(props) {
                   {!imgLoaded && (
                     <Skeleton
                       style={{
-                        width: "100%",
-                        height: "100%",
+                        width: '100%',
+                        height: '100%',
                         background: `${themeFuncForRectSkeleton()}`,
-                        position: "absolute",
+                        position: 'absolute',
                       }}
                       animation="wave"
                       variant="rect"
@@ -339,38 +333,38 @@ function Message(props) {
                 </motion.div>
                 <div
                   style={{
-                    position: "relative",
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
+                    position: 'relative',
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}
                 >
-                  <span style={{ fontSize: "12px" }}>
+                  <span style={{ fontSize: '12px' }}>
                     {likes || 0}
                     &nbsp;
-                    {likes === 1 ? "like" : "likes"}
+                    {likes === 1 ? 'like' : 'likes'}
                   </span>
                   <IconButton
                     aria-label="heart"
                     size="small"
                     onClick={handleHeartIconClick}
-                    style={{ width: "21px", height: "21px" }}
+                    style={{ width: '21px', height: '21px' }}
                   >
                     {TempLike ? (
                       <motion.div whileTap={{ scale: 1.3 }}>
                         <FavoriteIcon
                           style={{
-                            height: "15px",
-                            width: "15px",
-                            color: "red",
+                            height: '15px',
+                            width: '15px',
+                            color: 'red',
                           }}
                         />
                       </motion.div>
                     ) : (
                       <motion.div whileTap={{ scale: 1.3 }}>
                         <FavoriteBorderIcon
-                          style={{ height: "15px", width: "15px" }}
+                          style={{ height: '15px', width: '15px' }}
                         />
                       </motion.div>
                     )}

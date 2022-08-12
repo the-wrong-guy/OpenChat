@@ -1,12 +1,13 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter as Router } from "react-router-dom";
-import { Provider } from "react-redux";
-import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
-import "./index.scss";
-import App from "./App";
-import store from "./Redux/store";
-import actionTypes from "./Redux/Action/action.types";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.scss';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import App from './App';
+
+import actionTypes from './Redux/Action/action.types';
+import store from './Redux/store';
 
 // const dispatch = useDispatch();
 
@@ -20,7 +21,7 @@ ReactDOM.render(
     </Router>
   </Provider>,
   // eslint-disable-next-line no-undef
-  document.getElementById("root")
+  document.getElementById('root')
 );
 
 serviceWorkerRegistration.register({

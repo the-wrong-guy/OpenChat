@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-indent */
 /* eslint-disable react/jsx-filename-extension */
-import React from "react";
-import { Route, Switch, useLocation } from "react-router-dom";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import { AnimatePresence } from "framer-motion";
-import { useSelector } from "react-redux";
-import LoginPage from "./components/Login Page/login";
-import MainPage from "./components/Main Page/main";
+import React from 'react';
+import { Route, Switch, useLocation } from 'react-router-dom';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { AnimatePresence } from 'framer-motion';
+import { useSelector } from 'react-redux';
+import LoginPage from './components/Login Page/login';
+import MainPage from './components/Main Page/main';
 
 function App() {
   const isDarkTheme = useSelector((state) => state.CONFIG.darkTheme);
@@ -14,18 +14,18 @@ function App() {
     overrides: {
       MuiPaper: {
         root: {
-          backgroundColor: "#000000",
+          backgroundColor: '#000000',
         },
       },
     },
     palette: {
-      type: "dark",
+      type: 'dark',
     },
   });
 
   const lightTheme = createMuiTheme({
     palette: {
-      type: "light",
+      type: 'light',
     },
   });
 
